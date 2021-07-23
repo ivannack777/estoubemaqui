@@ -4,10 +4,10 @@ namespace App\Models;
 
 use CodeIgniter\Model;
 
-class Books extends Model
+class Produtos extends Model
 {
-    protected $table         = 'books';
-    protected $allowedFields = ['id','key','idpub','title','subtitle','pages','author','description','cover' ];
+    protected $table         = 'produtos';
+    protected $allowedFields = ['id','key','idpub','title','subtitle','pages','author','description','cover', 'categorias_id', 'price', 'price_promo'];
     protected $useTimestamps = true;
 }
 

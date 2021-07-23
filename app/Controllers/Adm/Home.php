@@ -12,23 +12,23 @@ class Home extends Controller
 
 	public function index()
 	{
-		$data['user'] = (object)['lang'=>'pt-br'];
+		$data['user'] = (object)['lang'=>'pt-br', 'price_simbol' => "R$"];
 		echo view('adm/header', $data);
 		//echo view('sidebar', $data);
 		echo view('adm/index', $data);
 		echo view('adm/footer', $data);
 	}
 
-	public function ebooks($item=null, $showDeleted=false, $retorno=null)
+	public function produtos($item=null, $showDeleted=false, $retorno=null)
 	{
-		$data['user'] = (object)['lang'=>'pt-br'];
+		$data['user'] = (object)['lang'=>'pt-br', 'price_simbol' => "R$"];
 		$data['retorno'] = $retorno;
 		if($item === 'new') { //$item == 0 => Adicionar item
 			echo view('header', $data);
 			echo view('adm/ebook_edit', $data);
 		} else{
-			$builder = $this->db->table('books');
-			$builder->select('id,key,idpub,title,subtitle,pages,author,description,cover,deleted_at');
+			$builder = $this->db->table('produtos');
+			$builder->select('id,key,idpub,title,subtitle,pages,author,description,cover,categorias_id,deleted_at');
 			if(!$showDeleted){
 				$builder->where('deleted_at', NULL);
 			}
@@ -37,17 +37,17 @@ class Home extends Controller
 
 			}
 			$query = $builder->get();
-			$data['ebooks'] = $query->getResult();
+			$data['produtos'] = $query->getResult();
 
 			// echo view('sidebar', $data);
 			
 			echo view('header', $data);
 			if($query->resultID->num_rows === 1) {
-				$data['ebook'] = $data['ebooks'][0];
+				$data['ebook'] = $data['produtos'][0];
 				echo view('adm/ebook_edit', $data);
 			} else{
 
-				echo view('adm/ebooks', $data);
+				echo view('adm/produtos', $data);
 			}
 		}
 
@@ -55,13 +55,13 @@ class Home extends Controller
 
 	}
 
-	public function ebooks_save($item=null, $deleted=false)
+	public function produtos_save($item=null, $deleted=false)
 	{
 		$showDeleted = false;
-		$data['user'] = (object)['lang'=>'pt-br'];
+		$data['user'] = (object)['lang'=>'pt-br', 'price_simbol' => "R$"];
 		//subtitle,pages,author,description,cover');
 		if($item){
-			$builder = $this->db->table('books');
+			$builder = $this->db->table('produtos');
 
 			$idpub = $this->request->getPost('idpub');
 			$idpubauto = $this->request->getPost('idpubauto');
@@ -141,7 +141,7 @@ var_dump($idpubauto, $idpub);
 			}
 
 		}
-		$this->ebooks($item, $showDeleted, $retorno);
+		$this->produtos($item, $showDeleted, $retorno);
 
 	}
 }

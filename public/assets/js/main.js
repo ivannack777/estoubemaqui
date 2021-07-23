@@ -73,16 +73,3 @@
 })(jQuery);
 
 
- $('.rolar').on('click', function(event) {
-        //event.preventDefault();
-
-        var target = $('#' + $(this).data('destino'));
-
-        if( target.length ) {
-
-            $('html, body').animate({
-                scrollTop: target.offset().top - 8
-            }, 1000, 'swing');
-        }
-
-    });

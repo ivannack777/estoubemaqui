@@ -28,6 +28,12 @@
 											<h2><?= $ebook->title ?></h2>
 											<h3><?= $ebook->subtitle ?></h3>
 											<p><?= substr($ebook->description, 0, 50) . (strlen($ebook->description) >= 50 ? '...': '') ?></p>
+											<p>
+												<span class="<?= $ebook->price_promo ? 'price-promo' : 'price' ?>"><?= $user->price_simbol ?> <?= $ebook->price ?></span>
+												<?php if($ebook->price_promo): ?>
+													<span class="price"><?= $user->price_simbol ?><?= $ebook->price_promo ?></span>
+												<?php endif ?>
+											</p>
 
 											<ul class="actions">
 												<li><a href="<?= site_url("home/ebooks/". $ebook->key ) ?>" class="button"><?= lang("Site.home.buttons.learnmore", [], $user->lang); ?></a></li>

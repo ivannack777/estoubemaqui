@@ -14,14 +14,15 @@ class Home extends BaseController
 
 	public function index()
 	{
-		$data['user'] = (object)['lang'=>'pt-br'];
+		$data['user'] = (object)['lang'=>'pt-br', 'price_simbol' => "R$"];
+		$data['home'] = true;
 
-		$ebooks = new \App\Models\Produtos();
+		$produtos = new \App\Models\Produtos();
 		$postagens = new \App\Models\Postagens();
-		// var_dump($ebooks->get());exit;
+		// var_dump($produtos->get());exit;
 
-		$data['ebooks'] = $ebooks->where('deleted_at', null)->get()->getResult();
-		$data['postagens'] = $postagens->get()->getResult();
+		$data['ebooks'] = $produtos->where('deleted_at', null)->where('categorias_id', 1)->get()->getResult();
+		$data['postagens'] = $postagens->where('deleted_at', null)->get()->getResult();
 		$data['loginsession'] = $this->session->get('login');
 		 // var_dump($data['loginsession'] );exit;
 		echo view('header', $data);
@@ -32,24 +33,24 @@ class Home extends BaseController
 
 	public function ebooks($item=null, $key=false)
 	{
-		$data['user'] = (object)['lang'=>'pt-br'];
+		$data['user'] = (object)['lang'=>'pt-br', 'price_simbol' => "R$"];
 
-		$ebooks = new \App\Models\Books();
+		$produtos = new \App\Models\Produtos();
 
 		if($item){
-			$ebooks->like('idpub', $item);
+			$produtos->like('idpub', $item);
 		}
 		if($key){
-			$ebooks->where('key', $item);
+			$produtos->where('key', $item);
 		}
 		
-		$data['ebooks'] = $ebooks->get()->getResult();
+		$data['ebooks'] = $produtos->get()->getResult();
 
 		
 		$data['session'] = $this->session;
 		echo view('header', $data);
 		// echo view('sidebar', $data);
-		if($ebooks->resultID->num_rows === 1) {
+		if($produtos->resultID->num_rows === 1) {
 			$data['ebook'] = $data['ebooks'][0];
 			echo view('ebook', $data);
 		} else{
@@ -67,7 +68,7 @@ class Home extends BaseController
 
 	public function postagens($item=null)
 	{
-		$data['user'] = (object)['lang'=>'pt-br'];
+		$data['user'] = (object)['lang'=>'pt-br', 'price_simbol' => "R$"];
 
 		$postagens = new \App\Models\Postagens();
 		if($item){

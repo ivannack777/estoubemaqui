@@ -12,18 +12,19 @@ class Cesta extends BaseController
 
 	public function index()
 	{
-		$data['user'] = (object)['lang'=>'pt-br'];
-		$ebooks = new \App\Models\Books();
+		$data['user'] = (object)['lang'=>'pt-br', 'price_simbol' => "R$"];
+		$produtos = new \App\Models\Produtos();
 		$data['itens'] = [];
 		$itens = $this->session->get('cesta');
+		$data['loginsession'] = $this->session->get('login');
 
 		if(is_array($itens)){
 			foreach($itens as $item => $qtd){
-				$ebooks->where('key', $item);
-				$result = $ebooks->get()->getResult();
+				$produtos->where('key', $item);
+				$result = $produtos->get()->getResult();
 				$data['itens'][] = [
 					'count' => $qtd,
-					'ebook' => $result[0] ?? null,
+					'produto' => $result[0] ?? null,
 				];
 			}
 		}
@@ -35,17 +36,37 @@ class Cesta extends BaseController
 
 	}
 
+	public function get()
+	{
+		$produtos = new \App\Models\Produtos();
+		$dataItens = [];
+		$sessionItens = $this->session->get('cesta');
+
+		if(is_array($sessionItens)){
+			foreach($sessionItens as $item => $qtd){
+				$produtos->where('key', $item);
+				$result = $produtos->get()->getResult();
+				$dataItens[] = [
+					'count' => (int)$qtd,
+					'produto' => $result[0] ?? null,
+				];
+			}
+		}
+
+		echo json_encode($dataItens);
+
+	}
 	public function setQuant($item=null, $quant)
 	{
 		sleep(1);
-		$data['user'] = (object)['lang'=>'pt-br'];
+		$data['user'] = (object)['lang'=>'pt-br', 'price_simbol' => "R$"];
 		$cesta = [];
-		$ebooks = new \App\Models\Books();
+		$produtos = new \App\Models\Produtos();
 
 		if($item){
-			$ebooks->where('key', $item);
+			$produtos->where('key', $item);
 		}
-		$ebooks = $ebooks->get()->getResult();
+		$produtos = $produtos->get()->getResult();
 
 		$cestaSession = $this->session->get('cesta');
 		if(is_array($cestaSession)){
@@ -61,14 +82,14 @@ class Cesta extends BaseController
 
 	public function add($item=null)
 	{
-		$data['user'] = (object)['lang'=>'pt-br'];
+		$data['user'] = (object)['lang'=>'pt-br', 'price_simbol' => "R$"];
 		$cesta = [];
-		$ebooks = new \App\Models\Books();
+		$produtos = new \App\Models\Produtos();
 
 		if($item){
-			$ebooks->where('key', $item);
+			$produtos->where('key', $item);
 		}
-		$ebooks = $ebooks->get()->getResult();
+		$produtos = $produtos->get()->getResult();
 
 		$cestaSession = $this->session->get('cesta');
 		if(is_array($cestaSession)){
@@ -82,14 +103,14 @@ class Cesta extends BaseController
 
 	public function remove($item=null)
 	{
-		$data['user'] = (object)['lang'=>'pt-br'];
+		$data['user'] = (object)['lang'=>'pt-br', 'price_simbol' => "R$"];
 		$cesta = [];
-		$ebooks = new \App\Models\Books();
+		$produtos = new \App\Models\Produtos();
 
 		if($item){
-			$ebooks->where('key', $item);
+			$produtos->where('key', $item);
 		}
-		$ebooks = $ebooks->get()->getResult();
+		$produtos = $produtos->get()->getResult();
 
 		$cestaSession = $this->session->get('cesta');
 		if(is_array($cestaSession)){
@@ -104,16 +125,16 @@ class Cesta extends BaseController
 		echo json_encode(true);
 	}
 
-	public function get()
-	{
-		$data['user'] = (object)['lang'=>'pt-br'];
-		$cesta = $this->session->get('cesta');
-		echo json_encode($cesta??[]);
-	}
+	// public function get()
+	// {
+	// 	$data['user'] = (object)['lang'=>'pt-br', 'price_simbol' => "R$"];
+	// 	$cesta = $this->session->get('cesta');
+	// 	echo json_encode($cesta??[]);
+	// }
 
 	public function clear()
 	{
-		$data['user'] = (object)['lang'=>'pt-br'];
+		$data['user'] = (object)['lang'=>'pt-br', 'price_simbol' => "R$"];
 		$this->session->remove('cesta');
 		echo json_encode(true);
 	}

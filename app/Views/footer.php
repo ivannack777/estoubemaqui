@@ -209,6 +209,24 @@ $("#clearCesta").click(function(){
         }
     });
 });
+
+$('.rolar').on('click', function(event) {
+
+    <?php if(isset($home) && $home === true): ?>
+        event.preventDefault();
+    <?php endif ?>
+
+    var target = $('#' + $(this).data('destino'));
+
+    if( target.length ) {
+
+        $('html, body').animate({
+            scrollTop: target.offset().top - 8
+        }, 1000, 'swing');
+    }
+
+});
+
 </script>
     </body>
 </html>

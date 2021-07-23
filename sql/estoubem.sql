@@ -16,6 +16,31 @@
 /*!40111 SET @OLD_SQL_NOTES=@@SQL_NOTES, SQL_NOTES=0 */;
 
 --
+-- Table structure for table `categorias`
+--
+
+DROP TABLE IF EXISTS `categorias`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!50503 SET character_set_client = utf8mb4 */;
+CREATE TABLE `categorias` (
+  `id` int NOT NULL AUTO_INCREMENT,
+  `idpub` varchar(64) NOT NULL,
+  `nome` varchar(64) NOT NULL,
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB AUTO_INCREMENT=2 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Dumping data for table `categorias`
+--
+
+LOCK TABLES `categorias` WRITE;
+/*!40000 ALTER TABLE `categorias` DISABLE KEYS */;
+INSERT INTO `categorias` VALUES (1,'e3a082afd1cc66bf67bc30bb476ebfab18a84bc3092aa454a1e17fbd6429cb56','Ebook');
+/*!40000 ALTER TABLE `categorias` ENABLE KEYS */;
+UNLOCK TABLES;
+
+--
 -- Table structure for table `postagens`
 --
 
@@ -65,6 +90,9 @@ CREATE TABLE `produtos` (
   `author` varchar(45) DEFAULT NULL,
   `description` text,
   `cover` varchar(45) DEFAULT NULL,
+  `categorias_id` int DEFAULT NULL,
+  `price` decimal(10,2) DEFAULT NULL,
+  `price_promo` decimal(10,2) DEFAULT NULL,
   `create_at` datetime DEFAULT CURRENT_TIMESTAMP,
   `update_at` datetime DEFAULT NULL ON UPDATE CURRENT_TIMESTAMP,
   `deleted_at` datetime DEFAULT NULL,
@@ -78,7 +106,7 @@ CREATE TABLE `produtos` (
 
 LOCK TABLES `produtos` WRITE;
 /*!40000 ALTER TABLE `produtos` DISABLE KEYS */;
-INSERT INTO `produtos` VALUES (1,'add49ddb3ada03142f0120be8b285f3ccdfe2e19c061ac2ec21e0251df034a36','yogue-se','Yogue-se','Yoga para auto perfeição',11,'Ivan','Vestibulum in venenatis eros. Aenean vitae odio lectus. Suspendisse potenti. Vivamus auctor metus ac volutpat gravida. Ut ipsum justo, imperdiet sit amet ipsum nec, porta auctor sapien. Donec non pellentesque leo. Suspendisse in leo malesuada, laoreet ante gravida, tincidunt massa. Vestibulum dui magna, sollicitudin ut ex et, varius dictum tortor. Praesent tincidunt ante condimentum purus aliquet sollicitudin. Mauris ullamcorper vulputate commodo. Donec a maximus erat, at sagittis tellus. Cras id commodo tortor. Integer semper rutrum ultrices. ','yogue-se1.webp','2021-06-27 11:14:51','2021-07-14 06:04:41',NULL),(2,'18e694c698e7e1d92417161cfe5fdb34ca38e8d0a19a2a4b8b57bb35a07a4119','18e694c698e7e1d92417161cfe5fdb34ca38e8d0a19a2a4b8b57bb35a07a4119','Novo titulo','Novo subtitulo',11,'Author','Descrição do novo livroi',NULL,'2021-06-27 11:14:51','2021-07-14 05:31:08','2021-06-27 13:44:13'),(3,'572b599b29e98786a95d68282edbd97bad27290e97beca439f834e97f45d84bg','572b599b29e98786a95d68282edbd97bad27290e97beca439f834e97f45d84bg','Novo titulo recuperado','Novo subtitulo',11,'Author','Descrição do novo livroi',NULL,'2021-06-27 15:08:08','2021-07-14 05:31:08','2021-06-27 14:09:47'),(4,'572b599b29e98786a95d68282edbd97bad27290e97beca439f834e97f45d84bf','572b599b29e98786a95d68282edbd97bad27290e97beca439f834e97f45d84bf','Novo titulo','Novo subtitulo',11,'Author','Descrição do novo livroi',NULL,'2021-06-27 15:11:33','2021-07-14 05:31:08','2021-06-27 14:09:53'),(5,'6fe14c47dd86990f87c63a9a132a75bde0673c0ee7dcd1bda3f7e62f2be66aad','6fe14c47dd86990f87c63a9a132a75bde0673c0ee7dcd1bda3f7e62f2be66aad','Novo titulo','Novo subtitulo',11,'Author','Descrição do novo livroi',NULL,'2021-06-27 15:11:59','2021-07-14 05:31:08','2021-06-27 14:15:56'),(6,'8472fa8bf26258c264ef0cca55404ee631a3f6dbe62e214105f0b970bda0f2a7','8472fa8bf26258c264ef0cca55404ee631a3f6dbe62e214105f0b970bda0f2a7','Novo titulo','Novo subtitulo',11,'Author','Descrição do novo livroi',NULL,'2021-06-27 15:12:40','2021-07-14 05:31:08','2021-06-27 14:16:07'),(7,'fbe02c51be49d6d06176ded04d8bd3650f6ea8df02b1c0e59a2a54bfe21ea93d','fbe02c51be49d6d06176ded04d8bd3650f6ea8df02b1c0e59a2a54bfe21ea93d','Novo titulo','Novo subtitulo',11,'Author','Descrição do novo livroi',NULL,'2021-06-27 15:13:46','2021-07-14 05:31:08','2021-06-27 14:18:11'),(8,'d51c61eb4a694046ad6f47c7dcd75f0a29f89666aa6a5cc803f208c659e39ae5','d51c61eb4a694046ad6f47c7dcd75f0a29f89666aa6a5cc803f208c659e39ae5','Novo titulo','Novo subtitulo',11,'Author','Descrição do novo livroi',NULL,'2021-06-27 15:15:20','2021-07-14 05:31:08','2021-06-27 14:18:22'),(9,'a15d810657b41a3074fe771ee1b80f7368c9d0768f2476985f2600a95d55b829','a15d810657b41a3074fe771ee1b80f7368c9d0768f2476985f2600a95d55b829','',NULL,NULL,NULL,NULL,NULL,'2021-06-27 15:15:44','2021-07-14 05:31:08','2021-06-27 14:42:10'),(10,'fba97c3357ae97e426095abbc38d387f9607421ba0dc557842c915ec412a57ba','fba97c3357ae97e426095abbc38d387f9607421ba0dc557842c915ec412a57ba','Novo titulo','Novo subtitulo',11,'Author','Descrição do novo livroi',NULL,'2021-06-27 15:15:55','2021-07-14 05:31:08','2021-06-27 14:42:23'),(11,'c23785082fcd80d90e4d68415f9fd4d077f403568e1c71e22a15e1ba060390d0','c23785082fcd80d90e4d68415f9fd4d077f403568e1c71e22a15e1ba060390d0','Novo titulo','Novo subtitulo',11,'Author','Descrição do novo livroi',NULL,'2021-06-27 15:16:55','2021-07-14 05:31:08','2021-06-27 14:42:27'),(12,'0edcfcb1365822a1a868a0eb3e0b67f77adffb0b70d020469522de70a053a5c8','0edcfcb1365822a1a868a0eb3e0b67f77adffb0b70d020469522de70a053a5c8','Novo titulo','Novo subtitulo',11,'Author','Descrição do novo livroi',NULL,'2021-06-27 15:18:08','2021-07-14 05:31:08','2021-06-27 14:42:31'),(13,'259c2bfc0872a997f22f7fd2ddcf3f6dcb6fab58876d3d48c3fb5b23d959c9f4','259c2bfc0872a997f22f7fd2ddcf3f6dcb6fab58876d3d48c3fb5b23d959c9f4','Novo titulo','Novo subtitulo',11,'Author','Descrição do novo livroi',NULL,'2021-06-27 15:19:41','2021-07-14 05:31:08','2021-06-27 14:42:35'),(14,'ee053372c5adf96d4ad533d45a740b1595525a61009b614edf8a9695b0f9101d','ee053372c5adf96d4ad533d45a740b1595525a61009b614edf8a9695b0f9101d','Meditação para iniciantes','Todos podem meditar',6,'Author','Curabitur et auctor nibh. Vestibulum sollicitudin justo nec viverra aliquet. Aliquam rhoncus ultrices arcu sit amet dignissim. Suspendisse potenti. Pellentesque habitant morbi tristique senectus et netus et malesuada fames ac turpis egestas. Praesent suscipit sollicitudin bibendum. Sed fringilla purus tellus, non rutrum dui convallis et. Orci varius natoque penatibus et magnis dis parturient montes, nascetur ridiculus mus. ',NULL,'2021-06-27 15:20:01','2021-07-14 05:31:24',NULL),(15,'f2fccbb2fbf7d2e4bccbfcfd9226e3e400edad09cf4d223e0c04cebc283cbb0b','f2fccbb2fbf7d2e4bccbfcfd9226e3e400edad09cf4d223e0c04cebc283cbb0b','Novo titulo d','Novo subtitulo',11,'Author','Descrição do novo livro depois de inserido',NULL,'2021-06-27 15:21:00','2021-07-14 05:31:24',NULL);
+INSERT INTO `produtos` VALUES (1,'add49ddb3ada03142f0120be8b285f3ccdfe2e19c061ac2ec21e0251df034a36','yogue-se','Yogue-se','Yoga para auto perfeição',11,'Ivan','Vestibulum in venenatis eros. Aenean vitae odio lectus. Suspendisse potenti. Vivamus auctor metus ac volutpat gravida. Ut ipsum justo, imperdiet sit amet ipsum nec, porta auctor sapien. Donec non pellentesque leo. Suspendisse in leo malesuada, laoreet ante gravida, tincidunt massa. Vestibulum dui magna, sollicitudin ut ex et, varius dictum tortor. Praesent tincidunt ante condimentum purus aliquet sollicitudin. Mauris ullamcorper vulputate commodo. Donec a maximus erat, at sagittis tellus. Cras id commodo tortor. Integer semper rutrum ultrices. ','yogue-se1.webp',1,9.99,NULL,'2021-06-27 11:14:51','2021-07-23 05:35:05',NULL),(14,'ee053372c5adf96d4ad533d45a740b1595525a61009b614edf8a9695b0f9101d','ee053372c5adf96d4ad533d45a740b1595525a61009b614edf8a9695b0f9101d','Meditação para iniciantes','Todos podem meditar',6,'Author','Curabitur et auctor nibh. Vestibulum sollicitudin justo nec viverra aliquet. Aliquam rhoncus ultrices arcu sit amet dignissim. Suspendisse potenti. Pellentesque habitant morbi tristique senectus et netus et malesuada fames ac turpis egestas. Praesent suscipit sollicitudin bibendum. Sed fringilla purus tellus, non rutrum dui convallis et. Orci varius natoque penatibus et magnis dis parturient montes, nascetur ridiculus mus. ',NULL,1,19.99,9.99,'2021-06-27 15:20:01','2021-07-23 05:35:05',NULL),(15,'f2fccbb2fbf7d2e4bccbfcfd9226e3e400edad09cf4d223e0c04cebc283cbb0b','f2fccbb2fbf7d2e4bccbfcfd9226e3e400edad09cf4d223e0c04cebc283cbb0b','Novo titulo d','Novo subtitulo',11,'Author','Descrição do novo livro depois de inserido',NULL,1,NULL,NULL,'2021-06-27 15:21:00','2021-07-23 05:20:39',NULL);
 /*!40000 ALTER TABLE `produtos` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -130,4 +158,4 @@ UNLOCK TABLES;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2021-07-22  7:06:20
+-- Dump completed on 2021-07-23  7:43:11

@@ -14,7 +14,7 @@ class Login extends BaseController
 
 	public function index()
 	{
-		$data['user'] = (object)['lang'=>'pt-br'];
+		$data['user'] = (object)['lang'=>'pt-br', 'price_simbol' => "R$"];
 
 		$usuarios = new \App\Models\Usuarios();
 		// var_dump($ebooks->get());exit;
@@ -30,7 +30,7 @@ class Login extends BaseController
 
 	public function entrar(){
 		// sleep(1);
-		$data['user'] = (object)['lang'=>'pt-br'];
+		$data['user'] = (object)['lang'=>'pt-br', 'price_simbol' => "R$"];
 		$retorno = [];
 		$identifier = $this->request->getPost('identifier');
 		$password = $this->request->getPost('password');

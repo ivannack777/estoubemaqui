@@ -4070,3 +4070,45 @@ div.separator {
 .submit{
 	background-color: green;
 }
+
+.price{
+	color: #A4ECFD;
+	font-size: 2em;
+}
+.price-promo{
+	color: #FFA1D0;;
+	font-size: 1em;
+	text-decoration: line-through;
+}
+
+.divtable{
+	display: table;
+}
+.divtable-full{
+	width: 100%;
+}
+.divtable-bordered .divcell {
+	border: 0.1em solid;
+	border-collapse: collapse;
+}
+.divtable-bordered .divcell:first-child {
+	border-radius: 0.6em 0 0 0.6em;
+}
+.divtable-bordered .divcell:last-child {
+	border-radius: 0 0.6em 0.6em 0;
+}
+.divtable .divrow:hover {
+	background-color: rgba(0, 0, 0, 0.3);
+}
+
+.divrow{
+	display: table-row;
+}
+.divcell{
+	display: table-cell;
+	padding: 0.3em;
+}
+
+.align-rigth{
+	align-items: right;
+}
