@@ -34,7 +34,7 @@
 								<label for="password"><?= lang("Site.users.password", [], $user->lang); ?></label>
 							</div>
 							<div class="col">
-								<input type="text" id="password" name="password">
+								<input type="password" id="password" name="password">
             	            </div>
 						</div>
 						<div class="row align-items-center inner items">

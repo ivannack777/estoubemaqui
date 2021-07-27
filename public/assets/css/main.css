@@ -3954,6 +3954,13 @@ img.icon {
 	color: #f4f4f4;
 }
 
+.alert-error {
+	border: 3px solid rgb(189, 23, 90);;
+	border-radius: 8px;
+	background-color:  rgb(255, 80, 150);
+	color: #f4f4f4;
+}
+
 button[type=edit]{
 	background-color: lightblue;
 }
@@ -4097,7 +4104,7 @@ div.separator {
 .divtable-bordered .divcell:last-child {
 	border-radius: 0 0.6em 0.6em 0;
 }
-.divtable .divrow:hover {
+.divtable-hober .divrow:hover {
 	background-color: rgba(0, 0, 0, 0.3);
 }
 

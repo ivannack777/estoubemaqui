@@ -36,11 +36,12 @@ class Cesta extends BaseController
 
 	}
 
-	public function get()
+	public function get($returnType = 'json')
 	{
 		$produtos = new \App\Models\Produtos();
 		$dataItens = [];
 		$sessionItens = $this->session->get('cesta');
+		$loginsession = $this->session->get('login');
 
 		if(is_array($sessionItens)){
 			foreach($sessionItens as $item => $qtd){
@@ -51,14 +52,37 @@ class Cesta extends BaseController
 					'produto' => $result[0] ?? null,
 				];
 			}
+		} else {
+			if($loginsession){
+				$cesta = new \App\Models\Cesta();
+				$cestaDB = $cesta->where('usuarios_id', $loginsession['id']);
+				$cestaReturn = $cestaDB->get()->getResult();
+				$cestaReturn = json_decode($cestaReturn[0]->itens);
+				if($cestaReturn){
+					foreach($cestaReturn as $item => $qtd){
+						$produtos->where('key', $item);
+						$result = $produtos->get()->getResult();
+						$dataItens[] = [
+							'count' => (int)$qtd,
+							'produto' => $result[0] ?? null,
+						];
+					}
+				}
+			// var_dump($dataItens);
+			}
 		}
+		//var_dump($dataItens);
 
-		echo json_encode($dataItens);
+		if($returnType == 'array'){
+			return $dataItens;
+		} else {
+			echo json_encode($dataItens);
+		}
 
 	}
 	public function setQuant($item=null, $quant)
 	{
-		sleep(1);
+		// sleep(1);
 		$data['user'] = (object)['lang'=>'pt-br', 'price_simbol' => "R$"];
 		$cesta = [];
 		$produtos = new \App\Models\Produtos();
@@ -76,6 +100,26 @@ class Cesta extends BaseController
 		if(isset($cesta[$item]) && is_numeric($quant) ){
 			$cesta[$item] = $quant;
 		}
+
+
+		$loginsession = $this->session->get('login');
+		if($loginsession){
+			$cestaModel = new \App\Models\Cesta();
+			$cestaModelGetResult = $cestaModel->where('usuarios_id', $loginsession['id'] )->get()->getResult();
+
+			if( count($cestaModelGetResult) ){
+				$dados = [
+					'key' => hash('sha256', $loginsession['key']),
+					'usuarios_id' => $loginsession['id'],
+					'itens' => json_encode($cesta),
+				];
+
+				$cestaModel->update(['id' => $cestaModelGetResult[0]->id ], $dados);
+			} else {
+				$cestaModel->insert($dados);
+			}
+		}
+
 		$this->session->set('cesta', $cesta);
 		echo json_encode($cesta[$item]);
 	}

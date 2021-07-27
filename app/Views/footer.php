@@ -33,6 +33,7 @@ function countItens(animate=false){
         },
         success: function(retorno){
             $("#cesta").html(Object.keys(retorno).length);
+            cestaMount(retorno)
             if(animate){
                 $("#cesta").animate({
                     fontSize: "3em",
@@ -70,11 +71,11 @@ $(".quantItemCesta").change(function(){
 });
 
 
-$(".increaseItemCesta").click(function(){
+$("#cestadiv").on('click', '.increaseItemCesta', function(){
     setQuant(this);
 });
 
-$(".decreaseItemCesta").click(function(){
+$("#cestadiv").on('click', '.decreaseItemCesta', function(){
     setQuant(this);
 });
 
@@ -85,8 +86,8 @@ function setQuant(este){
     var itemId = parent.data('item');
     var input = parent.find('input');
     var quant = parent.find('input').val();
+    var row = $("#row-"+ itemId);
 
-    
 
     if($(este).hasClass('increaseItemCesta')){
         quant = eval(+quant +1);
@@ -124,17 +125,28 @@ function setQuant(este){
         },
         success: function(retorno){
             saida = retorno;
-            countItens();
-            input.val(retorno).css('background-color', 'rgba(31, 121, 104, 0.7)');
+            input.val(retorno);
+
+            row.addClass('ok');
             setTimeout(function(){
-                input.css('background-color', '');
-            }, 600);
+                row.removeClass('ok', '');
+                countItens();
+            }, 1600);
+
+
+
             parent.find('svg').css('display', 'none');
             //console.log('addItem', saida);
         },
         error: function(st, text){
-            console.log(st, text);
             parent.find('svg').css('display', 'none');
+            row.addClass('error');
+            setTimeout(function(){
+                row.removeClass('error');
+            }, 1600);
+            $("#cestaAlert").css('display', 'block').removeClass().addClass('alert alert-error')
+                .html('Descupe, mas um erro acontceu aqui: '+ st.status +' '+ st.statusText)
+
         }
     });
     return saida;
@@ -209,6 +221,63 @@ $("#clearCesta").click(function(){
         }
     });
 });
+
+
+
+function cestaMount(CestaArray){
+    var price,priceParce, priceTotal=0,quant;
+    $("#cestadiv").html('');
+    for(var i=0; i<CestaArray.length; i++){
+        priceItem = 0;
+        priceItens = null;
+        console.log(i);
+        console.log(CestaArray[i]);
+
+        console.log('price_promo', (CestaArray[i].produto.price_promo));
+        console.log('price', CestaArray[i].produto.price);
+        if(CestaArray[i].produto.price){
+            priceItem = parseFloat(CestaArray[i].produto.price);
+        }
+        if(CestaArray[i].produto.price_promo){
+            priceItem = parseFloat(CestaArray[i].produto.price_promo);
+        }
+        quant = CestaArray[i].count;
+        priceItens = priceItem && quant ?  priceItem * quant : 0;
+        if(priceItens)  priceTotal += priceItens;
+        console.log('calculo', priceItem +'*'+ quant );
+        console.log('=', priceItem * quant );
+        console.log('priceTotal', priceTotal );
+        $("#price_total").val(priceTotal);
+        
+        $("#cestadiv").append(
+        '<div class="divrow items background-transition" id="row-'+ CestaArray[i].produto.key +'">'+
+        '    <div class="divcell">'+
+        '            <img class="mini" src="<?= site_url('assets/images/produtos/') ?>'+ CestaArray[i].produto.cover +'" alt="" data-position="center center" />'+
+        '        <button type="button" class="removeItem" data-item="'+ CestaArray[i].produto.key +'" title="<?= lang("Site.basket.buttons.remove", [], $user->lang) ?>"><i class="far fa-trash-alt"></i></button>'+
+        '        <strong>'+ CestaArray[i].produto.title +'</strong> '+ CestaArray[i].produto.subtitle +
+        '    </div>'+
+        '    <div class="divcell align-right"><?= $user->price_simbol ?> '+ (priceItem).toFixed(2) +'</div>'+
+        '    <div class="divcell">'+
+        '        <div class="btn-group quantItemCestadiv" data-item="'+ CestaArray[i].produto.key +'">'+
+        '            <button type="button" class="decreaseItemCesta" title="<?= lang("Site.basket.buttons.decrease", [], $user->lang) ?>" '+ (CestaArray[i].count < 2 ? "disabled" :"") +'>-</button>'+
+        '            <input type="text" class="quantItemCesta text-center" class="text-center"  value="'+ CestaArray[i].count +'"  placeholder="<?= lang("Site.basket.buttons.quant", [], $user->lang) ?>" title="<?= lang("Site.basket.buttons.quant", [], $user->lang) ?>" style="width:90px;")>'+
+        '            <i class="fa fa-spinner fa-spin" style="display:none;"></i>'+
+        '            <button type="button" class="increaseItemCesta" title="<?= lang("Site.basket.buttons.increase", [], $user->lang) ?>">+</button>'+
+        '        </div>'+
+        '    </div>'+
+        '    <div class="divcell align-right">'+
+        '        <?= $user->price_simbol ?> '+ priceItens.toFixed(2) +
+        '    </div>'+
+        '</div>');
+    }
+    $("#cestadiv").append(
+        '<div class="divrow">'+
+        '    <div class="divcell"></div>'+
+        '    <div class="divcell"></div>'+
+        '    <div class="divcell">Total</div>'+
+        '    <div id="priceTotal" class="divcell align-right"><strong><?= $user->price_simbol ?> '+ priceTotal.toFixed(2) +'</strong></div>'+
+        '</div>');
+}
 
 $('.rolar').on('click', function(event) {
 
