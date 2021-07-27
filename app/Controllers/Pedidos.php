@@ -1,7 +1,8 @@
 <?php
 
 namespace App\Controllers;
-use App\Libraries\phpQrcodePix\phpqrcodes\QRCode;
+include APPPATH."/Libraries/Phpqrcode/qrlib.php"; 
+
 class Pedidos extends BaseController
 {
 	private $session;
@@ -59,7 +60,12 @@ class Pedidos extends BaseController
 
 		}
 
-		$pedidosGet = $pedidosModel->getPedidos($key);
+		// $pedidosGet = $pedidosModel->getPedidos($key);
+		$key = md5('1');
+		$priceTotal = '9.99';
+		$pedidosGet[0] = (object)[
+			'key' => md5('1'),
+		];
 
 		if($pedidosGet && !empty($pedidosGet[0])){
 			$gerar_pix = true;
@@ -67,16 +73,16 @@ class Pedidos extends BaseController
 
 		if ($gerar_pix){
 			$chave_pix = "0d3003ff-2f13-4c30-90b0-7feb1d6218d6"; //Chave aleatória Nubank Ivan Nack
-			$descricao = "PAGAMENTO_PEDIDO";
+			$descricao = "PAGAMENTO_PEDID";
 			$beneficiario_pix = "IVAN NACK";
 			$cidade_pix = "MARINGA";
-			$identificador = "$key";
+			$identificador = "123456";
 			$valor_pix = $priceTotal;
 			// var_dump(exec('pwd'));
 			// var_dump(exec('ls -l ../app/Libraries/phpQrcodePix/phpqrcode/qrlib.php'));
 			// var_dump(exec('ls -l ../app/Libraries/phpQrcodePix/funcoes_pix.php'));
 			// exit;
-			include "../app/Libraries/phpQrcodePix/phpqrcode/qrlib.php"; 
+
 			include "../app/Libraries/phpQrcodePix/funcoes_pix.php";
 			$px[00]="01"; //Payload Format Indicator, Obrigatório, valor fixo: 01
 			// Se o QR Code for para pagamento único (só puder ser utilizado uma vez), descomente a linha a seguir.
@@ -111,23 +117,14 @@ class Pedidos extends BaseController
 		   $pix.=crcChecksum($pix); //Calcula o checksum CRC16 e acrescenta ao final.
 		   $linhas=round(strlen($pix)/120)+1;
 		   ?>
-		   <div class="card">
 		   <h3>Linha do Pix (copia e cola):</h3>
-		   <div class="row">
-		      <div class="col">
-		      <textarea class="text-monospace" id="brcodepix" rows="<?= $linhas; ?>" cols="130" onclick="copiar()"><?= $pix;?></textarea>
-		      </div>
-		      <div class="col md-1">
-		      <p><button type="button" id="clip_btn" class="btn btn-primary" data-toggle="tooltip" data-placement="top" title="Copiar código pix" onclick="copiar()"><i class="fas fa-clipboard"></i></button></p>
-		      </div>
-		   </div>
-		   </div>
+		      <?= $pix;?>
 		   <h3>Imagem de QRCode do Pix:</h3>
 		   <p>
-		   <img src="logo_pix.png"><br>
 		   <?php
+		   
 		   ob_start();
-		   QRCode::png($pix, null,'M',5);
+		   \QRCode::png($pix, null,'M',5);
 		   $imageString = base64_encode( ob_get_contents() );
 		   ob_end_clean();
 		   // Exibe a imagem diretamente no navegador codificada em base64.
