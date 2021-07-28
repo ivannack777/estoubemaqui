@@ -7,7 +7,7 @@ use CodeIgniter\Model;
 class Pedidos extends Model
 {
     protected $table         = 'pedidos';
-    protected $allowedFields = ['key', 'usuarios_id', 'produtos', 'status','price_total'];
+    protected $allowedFields = ['key','idpub', 'usuarios_id', 'produtos', 'status','price_total'];
     protected $useTimestamps = true;
 
     public function getPedidos($key=null, $usuarios_id=null){

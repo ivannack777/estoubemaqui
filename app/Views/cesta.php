@@ -19,8 +19,8 @@
 								<div class="style2" id="produtos" >
 									<div id="cestadiv" class="divtable divtable-full">
 
-									<input id="price_total" type="text" name="price_total">
 									</div>
+									<input id="price_total" type="hidden" name="price_total">
 
 									<button id="pedidoSave">Enviar pedido</button>
 
@@ -89,11 +89,16 @@ function pedidosSalvar(){
             	'<div class="divtable">'+
             	'  <div class="divrow">'+
             	'    <div class="divcell" style="vertical-align: top;">'+
-            	'		Fazer transfência por PIX no valor de <span style="font-size: 2.5em;">'+retorno.price_total +'</span><br>'+
-            	'		Chave: 0d3003ff-2f13-4c30-90b0-7feb1d6218d6'+
+            	'       <h3>Seu pedido '+ retorno.pedido.idpub +' está feito!</h3>'+
+            	'       O valor total é  <span style="font-size: 1.5em;">'+retorno.pedido.pricetotal +'</span><br>'+
+            	'		O pagamento pode ser feito por transfência PIX <br />'+
+            	'       Copiar e colar <i class="far fa-copy"></i><br>'+
+            	'       <div style=" border:1px solid grey; word-wrap: anywhere; padding: 9px;">'+ retorno.pix.copy +'</div>'+
+            	// '		Chave: 0d3003ff-2f13-4c30-90b0-7feb1d6218d6'+
             	'    </div>'+
             	'    <div class="divcell" style="vertical-align: top;">'+
-            	'		<img src="<?= site_url('assets/images/pix.png') ?>" style="width: 10em">'+
+            	'		<img src="<?= site_url('assets/images/logo_pix.png') ?>" alt="logo pix" style="width: 160px;">'+
+            	'       <img src="data:image/png;base64,'+ retorno.pix.qrcode +'" style="width: 160px;">'+
             	'  </div>'+
             	'</div>'
             );

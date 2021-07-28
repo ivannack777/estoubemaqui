@@ -1,7 +1,7 @@
 <?php
 
 namespace App\Controllers;
-include APPPATH."/Libraries/Phpqrcode/qrlib.php"; 
+include APPPATH."/Libraries/Phpqrcode/qrlib.php";
 
 class Pedidos extends BaseController
 {
@@ -40,9 +40,11 @@ class Pedidos extends BaseController
 
 
 		if($loginsession){
-			$key = hash('md5', $loginsession['key']);
+			// var_dump($loginsession);exit;
+			$key = hash('md5', $loginsession['id'] . date('YmdHis'));
 			$dados = [
 				'key' => $key,
+				'idpub' => base64_encode( $loginsession['id'] . date('YmdHis')),
 				'usuarios_id' => $loginsession['id'],
 				'produtos' => json_encode($cestaGet),
 				'price_total' => $priceTotal,
@@ -51,8 +53,6 @@ class Pedidos extends BaseController
 			$pedidosGet = $pedidosModel->getPedidos($key);
 
 			if( count($pedidosGet) ){
-
-
 				$pedidosModel->update(['key' => $key], $dados);
 			} else {
 				$pedidosModel->insert($dados);
@@ -60,23 +60,16 @@ class Pedidos extends BaseController
 
 		}
 
-		// $pedidosGet = $pedidosModel->getPedidos($key);
-		$key = md5('1');
-		$priceTotal = '9.99';
-		$pedidosGet[0] = (object)[
-			'key' => md5('1'),
-		];
+		$pedidosGet = $pedidosModel->getPedidos($key);
+
 
 		if($pedidosGet && !empty($pedidosGet[0])){
-			$gerar_pix = true;
-		}
-
-		if ($gerar_pix){
+			$pedidosGet[0]->pricetotal = $priceTotal;
 			$chave_pix = "0d3003ff-2f13-4c30-90b0-7feb1d6218d6"; //Chave aleatória Nubank Ivan Nack
-			$descricao = "PAGAMENTO_PEDID";
-			$beneficiario_pix = "IVAN NACK";
-			$cidade_pix = "MARINGA";
-			$identificador = "123456";
+			$descricao = "pedido". sprintf('%06s', $pedidosGet[0]->id);
+			$beneficiario_pix = "ivan_nack";
+			$cidade_pix = "maringa";
+			$identificador = $pedidosGet[0]->idpub;
 			$valor_pix = $priceTotal;
 			// var_dump(exec('pwd'));
 			// var_dump(exec('ls -l ../app/Libraries/phpQrcodePix/phpqrcode/qrlib.php'));
@@ -86,11 +79,11 @@ class Pedidos extends BaseController
 			include "../app/Libraries/phpQrcodePix/funcoes_pix.php";
 			$px[00]="01"; //Payload Format Indicator, Obrigatório, valor fixo: 01
 			// Se o QR Code for para pagamento único (só puder ser utilizado uma vez), descomente a linha a seguir.
-			//$px[01]="12"; //Se o valor 12 estiver presente, significa que o BR Code só pode ser utilizado uma vez. 
+			//$px[01]="12"; //Se o valor 12 estiver presente, significa que o BR Code só pode ser utilizado uma vez.
 			$px[26][00]="br.gov.bcb.pix"; //Indica arranjo específico; “00” (GUI) obrigatório e valor fixo: br.gov.bcb.pix
 			$px[26][01]=$chave_pix;
 			if (!empty($descricao)) {
-				/* 
+				/*
 				Não é possível que a chave pix e infoAdicionais cheguem simultaneamente a seus tamanhos máximos potenciais.
 				Conforme página 15 do Anexo I - Padrões para Iniciação do PIX  versão 1.2.006.
 				*/
@@ -116,25 +109,21 @@ class Pedidos extends BaseController
 		   $pix.="6304"; //Adiciona o campo do CRC no fim da linha do pix.
 		   $pix.=crcChecksum($pix); //Calcula o checksum CRC16 e acrescenta ao final.
 		   $linhas=round(strlen($pix)/120)+1;
-		   ?>
-		   <h3>Linha do Pix (copia e cola):</h3>
-		      <?= $pix;?>
-		   <h3>Imagem de QRCode do Pix:</h3>
-		   <p>
-		   <?php
-		   
+
+
 		   ob_start();
 		   \QRCode::png($pix, null,'M',5);
 		   $imageString = base64_encode( ob_get_contents() );
 		   ob_end_clean();
-		   // Exibe a imagem diretamente no navegador codificada em base64.
-		   echo '<img src="data:image/png;base64,' . $imageString . '"></p>';
+
 		   $pixRetorno['qrcode'] = $imageString;
 		   $pixRetorno['copy'] = $pix;
+		} else {
+			$pixRetorno = [];
 		}
 
 
-		echo  json_encode(['pedido'=>($pedidosGet[0] ?? []), 'pix'=>$pixRetorno]);
+		echo  json_encode(['pedido'=>($pedidosGet[0]??[]), 'pix'=> $pixRetorno]);
 	}
 
 
