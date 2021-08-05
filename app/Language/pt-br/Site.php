@@ -17,10 +17,12 @@ return [
         'updated' => 'Item foi salvo',
         'deleted' => 'Item foi excluído',
         'recovered' => 'Item foi recupedado',
+        'selectItem' => 'Selecionar este item',
     ],
     'basket' => [
         'title' => 'Cesta de produtos',
         'empty' => 'A cesta está vazia',
+        'order' => 'Pedido',
          'buttons' => [
             'clear' => 'Esvaziar cesta',
             'quant' => 'Quantidade',
@@ -28,6 +30,7 @@ return [
             'decrease' => 'Retirar uma unidade',
             'remove' => 'Remover este item',
             'clear' => 'Esvaziar cesta',
+            'sent'  => 'Enviar pedido',
         ]
     ],
     'users' =>[

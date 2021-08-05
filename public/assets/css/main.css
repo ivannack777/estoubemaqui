@@ -2317,7 +2317,7 @@ input, select, textarea {
 		border: none;
 		border: solid 1px rgba(255, 255, 255, 0.15);
 		color: inherit;
-		display: block;
+		/*display: block;*/
 		outline: 0;
 		padding: 0 1em;
 		text-decoration: none;
@@ -3955,7 +3955,7 @@ img.icon {
 }
 
 .alert-error {
-	border: 3px solid rgb(189, 23, 90);;
+	border: 3px solid rgb(189, 23, 90, 0.7);;
 	border-radius: 8px;
 	background-color:  rgb(255, 80, 150);
 	color: #f4f4f4;

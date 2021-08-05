@@ -43,12 +43,14 @@ class Cesta extends BaseController
 		$sessionItens = $this->session->get('cesta');
 		$loginsession = $this->session->get('login');
 
+
 		if(is_array($sessionItens)){
-			foreach($sessionItens as $item => $qtd){
+			foreach($sessionItens as $item => $dd){
 				$produtos->where('key', $item);
 				$result = $produtos->get()->getResult();
-				$dataItens[] = [
-					'count' => (int)$qtd,
+				$dataItens[$result[0]->id] = [
+					'count' => (int)$dd['quant'],
+					'checked' => (int)$dd['checked'],
 					'produto' => $result[0] ?? null,
 				];
 			}
@@ -57,13 +59,14 @@ class Cesta extends BaseController
 				$cesta = new \App\Models\Cesta();
 				$cestaDB = $cesta->where('usuarios_id', $loginsession['id']);
 				$cestaReturn = $cestaDB->get()->getResult();
-				$cestaReturn = json_decode($cestaReturn[0]->itens);
 				if($cestaReturn){
-					foreach($cestaReturn as $item => $qtd){
+					$cestaReturn = json_decode($cestaReturn[0]->itens);
+					foreach($cestaReturn as $item => $dd){
 						$produtos->where('key', $item);
 						$result = $produtos->get()->getResult();
-						$dataItens[] = [
-							'count' => (int)$qtd,
+						$dataItens[$result[0]->id] = [
+							'count' => (int)$dd['quant'],
+							'checked' => (int)$dd['checked'],
 							'produto' => $result[0] ?? null,
 						];
 					}
@@ -71,7 +74,7 @@ class Cesta extends BaseController
 			// var_dump($dataItens);
 			}
 		}
-		//var_dump($dataItens);
+		// var_dump($dataItens);
 
 		if($returnType == 'array'){
 			return $dataItens;
@@ -80,17 +83,17 @@ class Cesta extends BaseController
 		}
 
 	}
-	public function setQuant($item=null, $quant)
+	public function setQuant($item, $quant,$checked=0)
 	{
 		// sleep(1);
 		$data['user'] = (object)['lang'=>'pt-br', 'price_simbol' => "R$"];
 		$cesta = [];
-		$produtos = new \App\Models\Produtos();
+		// $produtos = new \App\Models\Produtos();
 
-		if($item){
-			$produtos->where('key', $item);
-		}
-		$produtos = $produtos->get()->getResult();
+		// if($item){
+		// 	$produtos->where('key', $item);
+		// }
+		// $produtos = $produtos->get()->getResult();
 
 		$cestaSession = $this->session->get('cesta');
 		if(is_array($cestaSession)){
@@ -98,7 +101,7 @@ class Cesta extends BaseController
 		}
 
 		if(isset($cesta[$item]) && is_numeric($quant) ){
-			$cesta[$item] = $quant;
+			$cesta[$item] = ['quant'=>$quant, 'checked'=>$checked];
 		}
 
 
@@ -107,12 +110,12 @@ class Cesta extends BaseController
 			$cestaModel = new \App\Models\Cesta();
 			$cestaModelGetResult = $cestaModel->where('usuarios_id', $loginsession['id'] )->get()->getResult();
 
+			$dados = [
+				'key' => hash('sha256', $loginsession['key']),
+				'usuarios_id' => $loginsession['id'],
+				'itens' => json_encode($cesta),
+			];
 			if( count($cestaModelGetResult) ){
-				$dados = [
-					'key' => hash('sha256', $loginsession['key']),
-					'usuarios_id' => $loginsession['id'],
-					'itens' => json_encode($cesta),
-				];
 
 				$cestaModel->update(['id' => $cestaModelGetResult[0]->id ], $dados);
 			} else {
@@ -128,19 +131,19 @@ class Cesta extends BaseController
 	{
 		$data['user'] = (object)['lang'=>'pt-br', 'price_simbol' => "R$"];
 		$cesta = [];
-		$produtos = new \App\Models\Produtos();
+		// $produtos = new \App\Models\Produtos();
 
-		if($item){
-			$produtos->where('key', $item);
-		}
-		$produtos = $produtos->get()->getResult();
+		// if($item){
+		// 	$produtos->where('key', $item);
+		// }
+		// $produtos = $produtos->get()->getResult();
 
 		$cestaSession = $this->session->get('cesta');
 		if(is_array($cestaSession)){
 			$cesta = $cestaSession;
 		}
 
-	 	$cesta[$item] = 1;
+	 	$cesta[$item] = ['quant'=>1, 'checked'=>0];
 		$this->session->set('cesta', $cesta);
 		echo json_encode(true);
 	}

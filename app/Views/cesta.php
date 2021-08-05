@@ -20,9 +20,9 @@
 									<div id="cestadiv" class="divtable divtable-full">
 
 									</div>
-									<input id="price_total" type="hidden" name="price_total">
+									
 
-									<button id="pedidoSave">Enviar pedido</button>
+									
 
 
 									<p id="cestaAlert" class="alert alert-info" style="display:<?= count($itens) ? 'none' : 'block' ?>">
@@ -53,8 +53,9 @@ function getCesta(){
 
         },
         success: function(retorno){
-            console.log(retorno.length, retorno);
-            cestaMount(retorno)
+            // console.log(retorno.length, retorno);
+            cestaMount(retorno);
+            calcCesta(retorno);
 
 
         },
@@ -84,7 +85,7 @@ function pedidosSalvar(){
 
         },
         success: function(retorno){
-            console.log(retorno.price_total);
+
             $("#cestadiv").html(
             	'<div class="divtable">'+
             	'  <div class="divrow">'+
@@ -92,8 +93,8 @@ function pedidosSalvar(){
             	'       <h3>Seu pedido '+ retorno.pedido.idpub +' está feito!</h3>'+
             	'       O valor total é  <span style="font-size: 1.5em;">'+retorno.pedido.pricetotal +'</span><br>'+
             	'		O pagamento pode ser feito por transfência PIX <br />'+
-            	'       Copiar e colar <i class="far fa-copy"></i><br>'+
-            	'       <div style=" border:1px solid grey; word-wrap: anywhere; padding: 9px;">'+ retorno.pix.copy +'</div>'+
+            	'       Copiar e colar <i class="far fa-copy" onclick="getElementById(pixcopy).value"></i><br>'+
+            	'       <div id="pixcopy" style="border:1px solid grey; word-wrap: anywhere; padding: 9px;">'+ retorno.pix.copy +'</div>'+
             	// '		Chave: 0d3003ff-2f13-4c30-90b0-7feb1d6218d6'+
             	'    </div>'+
             	'    <div class="divcell" style="vertical-align: top;">'+
@@ -111,4 +112,6 @@ function pedidosSalvar(){
     });
 
 }
+
+
 </script>
