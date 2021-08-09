@@ -1,5 +1,3 @@
-@import url(fontawesome-all.min.css);
-
 /*
 	Hyperspace by HTML5 UP
 	html5up.net | @ajlkn
@@ -4170,37 +4168,3 @@ div.separator {
 }
 
 
-.border-animate{
-  border: 2px solid;
-  border-radius: 15px;
-  border-image-slice: 4;
-  border-image-source: linear-gradient(0deg, red, blue, green, grey);
-  animation-name: example;
-  animation-duration: 3s;
-  animation-iteration-count: infinite;
-}
-
-  @keyframes example {
-0%   { border-image-source: linear-gradient(0deg,   red, blue, green, grey);}
-5%   { border-image-source: linear-gradient(18deg,  red, blue, green, grey);}
-10%  { border-image-source: linear-gradient(36deg,  red, blue, green, grey);}
-15%  { border-image-source: linear-gradient(54deg,  red, blue, green, grey);}
-20%  { border-image-source: linear-gradient(72deg,  red, blue, green, grey);}
-25%  { border-image-source: linear-gradient(90deg,  red, blue, green, grey);}
-30%  { border-image-source: linear-gradient(108deg, red, blue, green, grey);}
-35%  { border-image-source: linear-gradient(126deg, red, blue, green, grey);}
-40%  { border-image-source: linear-gradient(144deg, red, blue, green, grey);}
-45%  { border-image-source: linear-gradient(162deg, red, blue, green, grey);}
-50%  { border-image-source: linear-gradient(180deg, red, blue, green, grey);}
-55%  { border-image-source: linear-gradient(198deg, red, blue, green, grey);}
-60%  { border-image-source: linear-gradient(216deg, red, blue, green, grey);}
-65%  { border-image-source: linear-gradient(234deg, red, blue, green, grey);}
-70%  { border-image-source: linear-gradient(252deg, red, blue, green, grey);}
-75%  { border-image-source: linear-gradient(270deg, red, blue, green, grey);}
-80%  { border-image-source: linear-gradient(288deg, red, blue, green, grey);}
-85%  { border-image-source: linear-gradient(306deg, red, blue, green, grey);}
-90%  { border-image-source: linear-gradient(324deg, red, blue, green, grey);}
-95%  { border-image-source: linear-gradient(342deg, red, blue, green, grey);}
-100% { border-image-source: linear-gradient(360deg, red, blue, green, grey);}
-
-}
