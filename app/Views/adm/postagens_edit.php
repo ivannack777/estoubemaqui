@@ -1,4 +1,4 @@
-<?php 
+<?php
 $public_at = null;
 if(isset($postagens->public_at) && $postagens->public_at){
 	$public_at = new \DateTime($postagens->public_at, new \DateTimeZone('UTC'));
@@ -20,7 +20,7 @@ $postagens = $postagens[0] ?? null;
 
 								<div class="inner items">
 									<form action="<?= site_url('adm/postagens/save/'. ($postagens->idpub ?? 'new')) ?>" method="post">
-										<?php 
+										<?php
 										$retorno = $session->get('retorno');
 
 										if( $retorno ): ?>
@@ -47,9 +47,13 @@ $postagens = $postagens[0] ?? null;
 										<input type="text" id="author" name="author" value="<?= $postagens->author ?? '' ?>" />
 
 
-											<input type="checkbox" id="publicado" name="public" value="S" <?= isset($postagens) && $postagens->public_at ? 'checked' : '' ?>>
+										<br />
+										<input type="checkbox" id="publicado" name="public" value="S" <?= isset($postagens) && $postagens->public_at ? 'checked' : '' ?>>
 										<label for="publicado"><?= lang("Site.home.posts.labels.public", [], $user->lang); ?></label>
+
+										<br />
 										<?= lang("Site.home.posts.labels.public_at", [], $user->lang); ?> <?= $public_at ? $public_at->format('d/m/Y H:i:s') : '' ?>
+
 										<br />
 										<button type="submit"><?= lang("Site.form.save", [], $user->lang); ?></button>
 										<button type="reset"><?= lang("Site.form.reset", [], $user->lang); ?></button>

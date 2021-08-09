@@ -14,13 +14,15 @@
 
 				<p id="centaAlert" class="alert alert-info" style="display:<?= $retorno['status'] ? 'none' : 'block' ?>">
 					<span class="fa-stack fa-2x">
-						<i class="far fa-file fa-2x"></i>
-						<i class="fas fa-times fa-stack-1x text-danger"></i>
+						<i class="fas fa-user fa-2x"></i>
+						<i class="fas fa-check fa-stack-1x text-danger"></i>
 					</span>
-					<?= lang("Site.basket.empty", [], $user->lang); ?>
+					<?= $retorno['msg'] ?? '' ?>
 				</p>
 				<div id="logindiv" style="width: 50%;">
+					
 					<form id="formlogin" method="post" action="<?= site_url('login/entrar') ?>">
+						<input type="hidden" id="uri" name="uri" value="<?= $retorno['uri'] ?? '' ?>">
 						<div class="row align-items-center inner items">
 							<div class="col">
 								<label for="identifier"><?= lang("Site.users.identifier", [], $user->lang); ?></label>
@@ -61,24 +63,22 @@
 
 $("#formlogin").submit(function (e) {
 	e.preventDefault();
-	console.log('form');
 	var este = $("#ir");
 	login(este);
 });
 
 $("#ir").click(function (e) {
 	e.preventDefault();
-	console.log('click');
 	var este = $(this);
 	login(este);
 });
 
 function login(este){
-	console.log(este)
 	$.ajax({
         url: '<?= site_url('login/entrar') ?>',
         dataType:'json',
         data:{
+        	uri:$("#uri").val(),
         	identifier:$("#identifier").val(),
         	password:$("#password").val(),
         },
@@ -96,10 +96,10 @@ function login(este){
 				$("#retornodiv").addClass('text-success');
 				este.css('background-color', 'rgba(31, 131, 91, 0.7)');
 	            setTimeout(function(){
-	                este.css('background-color', '')();
+	                este.css('background-color', '');
 	            }, 600);
 	            setTimeout(function(){
-	                location.href = '<?= site_url() ?>';
+	                location.href = '<?= site_url() ?>'+retorno.uri;
 	            }, 600);
 	            
         	} else {

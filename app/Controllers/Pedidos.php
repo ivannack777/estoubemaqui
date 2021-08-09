@@ -6,17 +6,35 @@ include APPPATH."/Libraries/Phpqrcode/qrlib.php";
 class Pedidos extends BaseController
 {
 	private $session;
+	private $loginsession;
+	private $userPrefs;
 
 	public function __construct(){
 		$this->session = \Config\Services::session();
+		$this->loginsession = $this->session->get('login');
+		if($this->loginsession){
+			$usuarios = new \App\Models\Usuarios();
+			$this->userPrefs = $usuarios->userPrefs($this->loginsession['id']);
+		} else{
+			$this->userPrefs[0] = (object)[
+				'lang' => 'pt-br',
+				'price_simbol' => 'R$',
+				'data_format' => 'd/m/Y',
+				'time_format' => 'H:i',
+				'datTime_format' => 'd/m/Y H:i',
+			];
+		}
 	}
 
 	public function index()
 	{
-		$data['user'] = (object)['lang'=>'pt-br', 'price_simbol' => "R$"];
-		$data['loginsession'] = $this->session->get('login');
-		$pedidos = new \App\Models\Pedidos();
-		$data['pedidos'] = $pedidos->getPedidos(null);
+		$data['user'] = $this->userPrefs[0];
+		$data['loginsession'] = $this->loginsession;
+		$data['pedidos'] = [];
+		if($this->loginsession){
+			$pedidos = new \App\Models\Pedidos();
+			$data['pedidos'] = $pedidos->getPedidos(null, $this->loginsession['id']);
+		}
 
 		echo view('header', $data);
 		echo view('sidebar', $data);
@@ -27,60 +45,86 @@ class Pedidos extends BaseController
 
 	public function salvar()
 	{
+		$data['user'] = $this->userPrefs[0];
+
+		if(!$this->loginsession){
+			$data['loginrequired'] = true;
+			$data['retorno'] = ['status' => false, 'msg' => lang("Site.login.not", [], $this->userPrefs[0]->lang), 'uri' => uri_string()];
+			echo view('header', $data);
+			echo view('sidebar', $data);
+			echo view('login', $data);
+			echo view('footer', $data);
+			exit;
+		}
 		$pixRetorno = [];
 		$gerar_pix = false;
 		$data['user'] = (object)['lang'=>'pt-br', 'price_simbol' => "R$"];
-		$loginsession = $this->session->get('login');
-		$data['loginsession'] = $loginsession;
-		$priceTotal = $this->request->getPost('priceTotal');
-		$selectedItems = $this->request->getPost('selectedItems');
-		$pedidosModel = new \App\Models\Pedidos();
+		$data['loginsession'] = $this->loginsession;
+		$priceTotalSelected = [];
+		$price = 0;
+
 		$selectedItemsArr = [];
-		$cesta = new Cesta();
-		$cestaGet = $cesta->get('array');
 
-var_dump($priceTotal, $selectedItems);
 
-		foreach($cestaGet as $id => $itemCesta){
+		if($this->loginsession){
 
-			if(in_array($id, $selectedItems)){
-				$selectedItemsArr[$id] = $itemCesta;
+			/** Pegar cesta da sessão **/
+			$cesta = new Cesta();
+			$cestaGet = $cesta->get('array');
+
+
+			foreach($cestaGet as $key => $itemCesta){
+ 				$price = 0;
+
+ 				// var_dump($itemCesta);exit;
+
+				if($itemCesta['checked'] ){
+					/** Montar array com itens selecionados **/
+					$selectedItemsArr[ $itemCesta['produto']['key'] ] = $itemCesta;
+					/** Eliminar itens da cesta que já selecionados no pedido **/
+					unset($cestaGet[ $itemCesta['produto']['key'] ]);
+					if($itemCesta['produto']['price']){
+						$price = $itemCesta['produto']['price'];
+					}
+					if($itemCesta['produto']['price_promo']){
+						$price = $itemCesta['produto']['price_promo'];
+					}
+					$priceTotalSelected[] = $price;
+				}
 			}
-		}
-			var_dump($selectedItemsArr);
-			exit;
-		if($loginsession){
-			// var_dump($loginsession);exit;
-			$key = hash('md5', $loginsession['id'] . date('YmdHis'));
-			$dados = [
-				'key' => $key,
-				'usuarios_id' => $loginsession['id'],
-				'produtos' => json_encode($selectedItemsArr),
-				'price_total' => $priceTotal,
-			];
 
+			// var_dump($priceTotalSelected);
+ 			// exit;
 
-			if( count($pedidosGet) ){
-				$pedidosModel->update(['key' => $key], $dados);
-				$idpub = $pedidosGet[0]->idpub;
-			} else {
+			$cesta->set($cestaGet);
+
+			if(!empty($selectedItemsArr)){
+
+				$key = hash('md5', $this->loginsession['id'] . date('YmdHis'));
+				$dados = [
+					'key' => $key,
+					'usuarios_id' => $this->loginsession['id'],
+					'produtos' => json_encode($selectedItemsArr),
+					'price_total' => array_sum($priceTotalSelected),
+				];
+
+				$pedidosModel = new \App\Models\Pedidos();
 				$pedidosInsertID = $pedidosModel->insert($dados);
-				$idpub = date('yz') . sprintf('%06s', $loginsession['id']) . sprintf('%06s', $pedidosInsertID);
-				$pedidosModel->update(['id' => $pedidosInsertID], ['idpub' => $idpub]);
-			}
+				if($pedidosInsertID > 0){
+					$idpub = date('yz') . sprintf('%06s', $this->loginsession['id']) . sprintf('%06s', $pedidosInsertID);
+					$pedidosModel->update(['id' => $pedidosInsertID], ['idpub' => $idpub]);
+				}
 
 
-			$pedidosGet = $pedidosModel->getPedidos($key);
+				$pedidosGet = $pedidosModel->where('key', $dados['key'])->get();
+				$pedidosResult = $pedidosGet->getResult();
 
-
-			if($pedidosGet && !empty($pedidosGet[0])){
-				$pedidosGet[0]->pricetotal = $priceTotal;
 				$chave_pix = "0d3003ff-2f13-4c30-90b0-7feb1d6218d6"; //Chave aleatória Nubank Ivan Nack
 				$descricao = "pedido". $idpub;
 				$beneficiario_pix = "estou bem";
 				$cidade_pix = "maringa";
 				$identificador = "pedido". $idpub;
-				$valor_pix = $priceTotal;
+				$valor_pix = array_sum($priceTotalSelected);
 				// var_dump(exec('pwd'));
 				// var_dump(exec('ls -l ../app/Libraries/phpQrcodePix/phpqrcode/qrlib.php'));
 				// var_dump(exec('ls -l ../app/Libraries/phpQrcodePix/funcoes_pix.php'));
@@ -134,7 +178,7 @@ var_dump($priceTotal, $selectedItems);
 
 
 			// echo  json_encode(['pedido'=>($pedidosGet[0]??[]), 'pix'=> $pixRetorno]);
-			$data['pedido'] = ($pedidosGet[0]??[]);
+			$data['pedido'] = ($pedidosResult??[]);
 			$data['pix'] = $pixRetorno;
 		} else {
 			$data['pedido'] = [];

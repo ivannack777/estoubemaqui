@@ -16,14 +16,15 @@
 								<?php else: ?>
 
 									<h3><?= lang("Site.home.posts.count", [count($postagens)], $user->lang); ?></h3>
-									<?php foreach($postagens as $postagem): ?>
+									<?php foreach($postagens as $postagem): 
+										$publicAt = App\Dates::format($postagem->public_at,  $user->dateTime_format);
+										?>
 										<div class="inner items separator">
 											<h2><?= $postagem->title ?></h2>
 											<h3><?= $postagem->subtitle ?></h3>
-
-											<p><?= substr($postagem->text, 0, 50) . (strlen($postagem->text) >= 50 ? '...': '') ?>
-											<br />
-											<?= lang("Site.home.posts.labels.public_at", [], $user->lang); ?> <?= $postagem->public_at ?>
+											<p>
+												<?= substr($postagem->text, 0, 50) . (strlen($postagem->text) >= 50 ? '...': '') ?><br />
+												<?= lang("Site.home.posts.labels.public_at", [], $user->lang); ?> <?= $publicAt ?>
 											</p>
 
 											<ul class="actions">

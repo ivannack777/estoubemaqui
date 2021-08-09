@@ -31,7 +31,10 @@
 											<p>
 												<span class="<?= $ebook->price_promo ? 'price-promo' : 'price' ?>"><?= $user->price_simbol ?> <?= $ebook->price ?></span>
 												<?php if($ebook->price_promo): ?>
-													<span class="price"><?= $user->price_simbol ?><?= $ebook->price_promo ?></span>
+													<span class="price"><?= $user->price_simbol ?> <?= $ebook->price_promo ?></span>
+												<?php endif ?>
+												<?php if(empty($ebook->price) && empty($ebook->price_promo)): ?>
+													<span class="price">0.00</span>
 												<?php endif ?>
 											</p>
 

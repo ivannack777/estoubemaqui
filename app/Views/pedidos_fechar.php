@@ -10,18 +10,22 @@
 						<section>
 							<div class="content">
 								<!-- posts session -->
-								<?php //var_dump($pedido); ?>
-								<?php //var_dump($pix); ?>
+
 								<h2 class="sessions"><?= lang("Site.basket.order", [], $user->lang); ?></h2>
-								<?php if(!count($pedido)): ?>
-									nada
-								<?php else: ?>
+								<?php 
+
+								if(!isset($pedido[0])): ?>
+									<?= lang("Site.order.not", [], $user->lang); ?>
+								<?php else: 
+									$pedido = $pedido[0];
+									// var_dump(($pedido));exit;
+									?>
 									<div class="style2" id="pedidos" >
 										<div id="pedidosdiv" class="divtable divtable-full">
 											<div class="divrow">
 												<div class="divcell" style="vertical-align: top;">
 												   <h3>Seu pedido <?= $pedido->idpub ?> está fechado!</h3>
-												   O valor total é  <span style="font-size: 1.5em;"><?= $pedido->pricetotal ?></span><br>
+												   O valor total é  <span style="font-size: 1.5em;"><?= $pedido->price_total ?></span><br>
 													O pagamento pode ser feito por transfência PIX <br />
 												   Copiar e colar <button id="pixcopy" onclick="copyToClipboard('<?= $pix['copy'] ?>')" title="Copiar chave pix" style="padding: 7px; font-size: 1em; height: auto; line-height: 0.75em;"><i class="far fa-copy"></i></button><br>
 												   <div id="pixcopy" style="border:1px solid grey; word-wrap: anywhere; padding: 9px;"><?= $pix['copy'] ?></div>
@@ -43,7 +47,7 @@
 
    $.ajax({
 
-        url : '<?= site_url('cesta/get') ?>',
+        url : '<?= site_url('cesta/get/json') ?>',
         dataType:'json',
         beforeSend: function(){
 

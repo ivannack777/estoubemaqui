@@ -32,6 +32,8 @@ class Login extends BaseController
 		// sleep(1);
 		$data['user'] = (object)['lang'=>'pt-br', 'price_simbol' => "R$"];
 		$retorno = [];
+		$uri = $this->request->getPost('uri');
+		
 		$identifier = $this->request->getPost('identifier');
 		$password = $this->request->getPost('password');
 
@@ -85,7 +87,7 @@ class Login extends BaseController
 		{
 		    die($e->getMessage());
 		}
-
+		$retorno['uri'] = $uri??'';
 		echo json_encode($retorno);
 	}
 

@@ -26,7 +26,7 @@ $(document).ready(function(){
 function countItens(animate=false){
     $.ajax({
 
-        url : '<?= site_url('cesta/get') ?>',
+        url : '<?= site_url('cesta/get/json') ?>',
         dataType:'json',
         beforeSend: function(){
 
@@ -72,6 +72,7 @@ $(".quantItemCesta").change(function(){
 });
 
 
+
 $("#cestadiv").on('click', '.increaseItemCesta', function(){
     setQuant(this);
 });
@@ -80,17 +81,35 @@ $("#cestadiv").on('click', '.decreaseItemCesta', function(){
     setQuant(this);
 });
 
+$("#cestadiv").on('click', '.checkItemCesta', function(){
+    setQuant(this);
+});
+
+$("#cestadiv").on('keypress', '.quantItemCesta', function(evt){
+    console.log('quantItemCesta keypress', evt, $("#formCesta"));
+    if(evt.which == 13){
+        setQuant(this);
+         $("#formCesta").submit(function(frmEvt){
+            frmEvt.preventDefault();
+         });
+    }
+});
+
 function setQuant(este){
     var saida = false;
 
     var parent = $(este).parent('div');
     var itemId = parent.data('item');
     var input = parent.find('input');
-    var quant = parent.find('input').val();
+    var quant = $("#quant"+itemId).val();
+    var btnSent = $("#pedidoSave");
     var checkbox = $("#checkbox"+itemId).is(':checked');
     var row = $("#row-"+ itemId);
+    btnSent.prop('disabled', true);
 
-// console.log(checkbox);
+    parent.addClass('border-animate');
+
+ // console.log('quant btnSent', btnSent);
 
     if($(este).hasClass('increaseItemCesta')){
         quant = eval(+quant +1);
@@ -225,111 +244,131 @@ $("#clearCesta").click(function(){
 
 
 
-function cestaMount(CestaArray){
+function cestaMount(CestaObj){
     var price,priceParce,quant;
+    console.log('cestaMount');
     $("#cestadiv").html('');
-    var $form = $('<form method="post" action="<?= site_url('pedidos/salvar') ?>"></form>');
+    var $divTable = $('<div class="divtable divtable-full table-background">');
+    var $form = $('<form id="formCesta" method="post" action="<?= site_url('pedidos/salvar') ?>"></form>');
+    var $btnSent= $('<button type="button" id="pedidoSave"><?= lang("Site.basket.buttons.sent", [], $user->lang) ?></button>');
+    var $cestaAlert = $("#cestaAlert").clone();
+    // var $cestaAlert = $('<div id="cestaAlert">');
     $("#cestadiv").append($form);
-    console.log(CestaArray);
-    for(let i in CestaArray){
-    console.log(i);
-        priceItem = 0;
-        priceItens = null;
-        // console.log(i);
-        // console.log(CestaArray[i]);
+    // console.log(Object.keys(CestaObj));
+    if(Object.keys(CestaObj).length){
+        for(let i in CestaObj){
+            priceItem = 0;
+            priceItens = null;
+            // console.log(i);
+            console.log(CestaObj[i]);
 
-        // console.log('price_promo', (CestaArray[i].produto.price_promo));
-        // console.log('price', CestaArray[i].produto.price);
-        if(CestaArray[i].produto.price){
-            priceItem = parseFloat(CestaArray[i].produto.price);
+            // console.log('price_promo', (CestaObj[i].produto.price_promo));
+            // console.log('price', CestaObj[i].produto.price);
+            if(CestaObj[i].produto.price){
+                priceItem = parseFloat(CestaObj[i].produto.price);
+            }
+            if(CestaObj[i].produto.price_promo){
+                priceItem = parseFloat(CestaObj[i].produto.price_promo);
+            }
+            quant = CestaObj[i].quant;
+            priceItens = priceItem && quant ?  priceItem * quant : 0;
+            let checked = CestaObj[i].checked ? 'checked':'';
+            $divTable.append(
+            '<div class="divrow items background-transition" id="row-'+ CestaObj[i].produto.key +'">'+
+            '    <div class="divcell">'+
+            '      <div data-item="'+ CestaObj[i].produto.key +'">'+
+            '        <img class="mini" src="<?= site_url('assets/images/produtos/') ?>'+ (CestaObj[i].produto.cover?CestaObj[i].produto.cover:'pic01.jpg') +'" alt="" data-position="center center" />'+
+            '        <input '+checked+' type="checkbox" id="checkbox'+ CestaObj[i].produto.key +'" class="checkItemCesta" name="selectedItems[]" value="'+ CestaObj[i].produto.key +'" title="<?= lang("Site.form.selectItem", [], $user->lang) ?>" />'+
+            '        <label for="checkbox'+ CestaObj[i].produto.key +'" title="<?= lang("Site.form.selectItem", [], $user->lang) ?>"><strong>'+ CestaObj[i].produto.title +'</strong> '+ CestaObj[i].produto.subtitle +'</label>'+
+            '      </div>'+
+            '    </div>'+
+            '    <div class="divcell align-right"><?= $user->price_simbol ?> '+ (priceItem).toFixed(2) +'</div>'+
+            '    <div class="divcell">'+
+            '        <div class="btn-group" data-item="'+ CestaObj[i].produto.key +'">'+
+            '            <button type="button" class="decreaseItemCesta" title="<?= lang("Site.basket.buttons.decrease", [], $user->lang) ?>" '+ (CestaObj[i].quant < 2 ? "disabled" :"") +'>-</button>'+
+            '            <input id="quant'+ CestaObj[i].produto.key +'" type="text" class="quantItemCesta text-center" class="text-center"  value="'+ CestaObj[i].quant +'"  placeholder="<?= lang("Site.basket.buttons.quant", [], $user->lang) ?>" title="<?= lang("Site.basket.buttons.quant", [], $user->lang) ?>" style="width:90px;")>'+
+            '            <i class="fa fa-spinner fa-spin" style="display:none;"></i>'+
+            '            <button type="button" class="increaseItemCesta" title="<?= lang("Site.basket.buttons.increase", [], $user->lang) ?>">+</button>'+
+            '        </div>'+
+            '    </div>'+
+            '    <div class="divcell align-right">'+
+            '        <?= $user->price_simbol ?> '+ priceItens.toFixed(2) +
+            '    </div>'+
+            '    <div class="divcell align-right">'+
+            '        <button type="button" class="removeItem" data-item="'+ CestaObj[i].produto.key +'" title="<?= lang("Site.basket.buttons.remove", [], $user->lang) ?>"><i class="far fa-trash-alt"></i></button>'+
+            '    </div>'+
+            '</div>');
         }
-        if(CestaArray[i].produto.price_promo){
-            priceItem = parseFloat(CestaArray[i].produto.price_promo);
-        }
-        quant = CestaArray[i].count;
-        priceItens = priceItem && quant ?  priceItem * quant : 0;
-        let checked = CestaArray[i].checked ? 'checked':'';
+        $form.append($divTable);
         $form.append(
-        '<div class="divrow items background-transition" id="row-'+ CestaArray[i].produto.key +'">'+
-        '    <div class="divcell">'+
-        '      <div data-item="'+ CestaArray[i].produto.key +'">'+
-        '        <img class="mini" src="<?= site_url('assets/images/produtos/') ?>'+ (CestaArray[i].produto.cover?CestaArray[i].produto.cover:'pic01.jpg') +'" alt="" data-position="center center" />'+
-        '        <input '+checked+' type="checkbox" id="checkbox'+ CestaArray[i].produto.key +'" class="increaseItemCesta" name="selectedItems[]" value="'+ CestaArray[i].produto.id +'" title="<?= lang("Site.form.selectItem", [], $user->lang) ?>" />'+
-        '        <label for="checkbox'+ CestaArray[i].produto.key +'" title="<?= lang("Site.form.selectItem", [], $user->lang) ?>"><strong>'+ CestaArray[i].produto.title +'</strong> '+ CestaArray[i].produto.subtitle +'</label>'+
-        '      </div>'+
-        '    </div>'+
-        '    <div class="divcell align-right"><?= $user->price_simbol ?> '+ (priceItem).toFixed(2) +'</div>'+
-        '    <div class="divcell">'+
-        '        <div class="btn-group" data-item="'+ CestaArray[i].produto.key +'">'+
-        '            <button type="button" class="decreaseItemCesta" title="<?= lang("Site.basket.buttons.decrease", [], $user->lang) ?>" '+ (CestaArray[i].count < 2 ? "disabled" :"") +'>-</button>'+
-        '            <input type="text" class="quantItemCesta text-center" class="text-center"  value="'+ CestaArray[i].count +'"  placeholder="<?= lang("Site.basket.buttons.quant", [], $user->lang) ?>" title="<?= lang("Site.basket.buttons.quant", [], $user->lang) ?>" style="width:90px;")>'+
-        '            <i class="fa fa-spinner fa-spin" style="display:none;"></i>'+
-        '            <button type="button" class="increaseItemCesta" title="<?= lang("Site.basket.buttons.increase", [], $user->lang) ?>">+</button>'+
-        '        </div>'+
-        '    </div>'+
-        '    <div class="divcell align-right">'+
-        '        <?= $user->price_simbol ?> '+ priceItens.toFixed(2) +
-        '    </div>'+
-        '    <div class="divcell align-right">'+
-        '        <button type="button" class="removeItem" data-item="'+ CestaArray[i].produto.key +'" title="<?= lang("Site.basket.buttons.remove", [], $user->lang) ?>"><i class="far fa-trash-alt"></i></button>'+
-        '    </div>'+
-        '</div>');
+            '<div class="align-rigth">'+
+            ' <div class="divtable">'+
+            '  <div class="divrow">'+
+            '    <div class="divcell text-right"><?= lang("Site.basket.total", [], $user->lang) ?></div>'+
+            '    <div class="divcell text-right">'+
+            '      <i class="fa fa-spinner fa-spin" style="visibility:hidden;"></i>'+
+            '      <input type="text" id="priceTotal" name="priceTotal" value="" style="text-align: right; background-color: rgba(0,0,0,0);" />'+
+            '    </div>'+
+            '  </div>'+
+            '  <div class="divrow">'+
+            '    <div class="divcell text-right"><?= lang("Site.basket.totalSelected", [], $user->lang) ?></div>'+
+            '    <div class="divcell text-right">'+
+            '      <i class="fa fa-spinner fa-spin" style="visibility:hidden;"></i>'+
+            '      <input type="text" id="priceTotalSelected" name="priceTotalSelected" value="" style="text-align: right; background-color: rgba(0,0,0,0);" />'+
+            '    </div>'+
+            '  </div>'+
+            ' </div>'+
+            '</div>');
+
+        $form
+            .append( $btnSent)
+            .append($cestaAlert)
     }
-    $form.append(
-        '<div class="divrow">'+
-        '    <div class="divcell"></div>'+
-        '    <div class="divcell"></div>'+
-        '    <div class="divcell">Total</div>'+
-        '    <div class="divcell">'+
-        '      <input type="text" id="priceTotal" name="priceTotal" value="" style="width:90%; text-align: right; background-color: rgba(0,0,0,0);" />'+
-        '      <i class="fa fa-spinner fa-spin" style="visibility:hidden;"></i>'+
-        '    </div>'+
-        '</div>'+
-        '<div class="divrow">'+
-        '    <div class="divcell"></div>'+
-        '    <div class="divcell"></div>'+
-        '    <div class="divcell">Total selecionado</div>'+
-        '    <div class="divcell">'+
-        '      <input type="text" id="priceTotalSelected" name="priceTotalSelected" value="" style="width:90%; text-align: right; background-color: rgba(0,0,0,0);" />'+
-        '      <i class="fa fa-spinner fa-spin" style="visibility:hidden;"></i>'+
-        '    </div>'+
-        '</div>');
-    $form.append(
-        '<div class="divrow">'+
-        '    <div class="divcell">'+
-        '       <button type="submit" id="pedidoSave"><?= lang("Site.basket.buttons.sent", [], $user->lang) ?></button></a>'+
-        '   </div>'+
-        '</div>');
-    
+    $form.submit(function(e){
+        console.log('form submit', e);
+        // e.preventDefault();
+    });
+
+    $btnSent.click(function(){
+
+        $btnSent.data('clicked', 1);
+        if($(".checkItemCesta:checked").length){
+            $form.submit();
+        }else{
+            $cestaAlert.find("#cestaAlertText").html('<?= lang("Site.basket.noSelected", [], $user->lang) ?>');
+            $cestaAlert.addClass('alert-warning').show('slow');
+        }
+
+    });
     
 }
 
-function calcCesta(CestaArray){
+function calcCesta(CestaObj){
     var price,priceParce, priceTotal=0,priceTotalSelected = 0,quant;
         console.log('calcCesta');
-    for(i in CestaArray){
-        console.log('item: ', CestaArray[i]);
+    for(i in CestaObj){
+        console.log('item: ', CestaObj[i]);
         priceItem = 0;
         priceItens = null;
-        if(CestaArray[i].produto.price){
-            priceItem = parseFloat(CestaArray[i].produto.price);
+        if(CestaObj[i].produto.price){
+            priceItem = parseFloat(CestaObj[i].produto.price);
         }
-        if(CestaArray[i].produto.price_promo){
-            priceItem = parseFloat(CestaArray[i].produto.price_promo);
+        if(CestaObj[i].produto.price_promo){
+            priceItem = parseFloat(CestaObj[i].produto.price_promo);
         }
-        quant = CestaArray[i].count;
+        quant = CestaObj[i].quant;
         priceItens = priceItem && quant ?  priceItem * quant : 0;
         if(priceItens){
           priceTotal += priceItens;
         // console.log('priceTotal :: ', priceTotal );
-          if( CestaArray[i].checked )  priceTotalSelected += priceItens;
+          if( CestaObj[i].checked )  priceTotalSelected += priceItens;
         }
         // console.log('calculo: ', priceItem +'*'+ quant );
         // console.log('=', priceItem * quant );
         // console.log('priceTotal: ', priceTotal );
         // console.log('priceTotalSelected: ', priceTotalSelected );
-        $("#priceTotal").val('<?= $user->price_simbol ?> '+priceTotal.toFixed(2));
-        $("#priceTotalSelected").val('<?= $user->price_simbol ?> '+priceTotalSelected.toFixed(2));
+        $("#priceTotal").val(priceTotal.toFixed(2));
+        $("#priceTotalSelected").val(priceTotalSelected.toFixed(2));
     }
 }
 

@@ -17,7 +17,7 @@
 								<!-- posts session -->
 								<h2 class="sessions"><?= lang("Site.basket.title", [], $user->lang); ?></h2>
 								<div class="style2" id="produtos" >
-									<div id="cestadiv" class="divtable divtable-full">
+									<div id="cestadiv">
 
 									</div>
 									
@@ -44,10 +44,13 @@ var cestaPedido;
 
 getCesta();
 
+
+
+
 function getCesta(){
     $.ajax({
 
-        url : '<?= site_url('cesta/get') ?>',
+        url : '<?= site_url('cesta/get/json') ?>',
         dataType:'json',
         beforeSend: function(){
 

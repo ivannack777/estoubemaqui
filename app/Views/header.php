@@ -19,10 +19,11 @@
     </head>
     <body class="is-preload">
         <div style="position: fixed; right: 250px; top:20px; z-index: 1;">
-            <?php if($loginsession): ?>
-                <a href="<?= site_url('login/sair')?>"><span class="fa fa-user text-success"></span></a>
+            <?php if($loginsession ?? false): ?>
+                <a href="<?= site_url('login/sair')?>"><span class="fas fa-user text-success"></span></a>
+                <a href="<?= site_url('pedidos')?>"><span class="fas fa-box"></span></a>
             <?php else: ?>
-                <a href="<?= site_url('login')?>"><span class="fa fa-user text-info"></span></a>
+                <a href="<?= site_url('login')?>"><span class="fas fa-user text-info"></span></a>
             <?php endif ?>
         </div>
         <div style="position: fixed; right: 50px; top:20px; z-index: 1;">
@@ -30,4 +31,8 @@
                 <img src="<?= site_url('assets/images/cesta.svg') ?>" style="width: 48px; opacity: 0.8;">
                 <div id="cesta" style="position: absolute; right: 14px; top:-15px;font-size: 2em; font-weight: 600; color: #A8AAFB;"></div>
             </a>
+        </div>
+        <div id="cestaAlert" class="alert" style="display:none">
+            <span id="cestaAlertIcon"><i class="fas fa-times text-danger"></i></span>
+            <span id="cestaAlertText"></span>
         </div>

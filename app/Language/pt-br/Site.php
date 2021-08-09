@@ -23,6 +23,9 @@ return [
         'title' => 'Cesta de produtos',
         'empty' => 'A cesta está vazia',
         'order' => 'Pedido',
+        'total' => 'Total',
+        'totalSelected' => 'Total selecionado',
+        'noSelected' => 'Por favor, selecione ao menos um item antes de enviar o pedido',
          'buttons' => [
             'clear' => 'Esvaziar cesta',
             'quant' => 'Quantidade',
@@ -32,6 +35,21 @@ return [
             'clear' => 'Esvaziar cesta',
             'sent'  => 'Enviar pedido',
         ]
+    ],
+    'order' => [
+        'title' => 'Pedidos',
+        'subtitle' => 'Estes são os seus pedidos',
+        'empty' => 'Você ainda não tem nenhum pedido',
+        'not' => 'Você não selecionou nenhum item para o pedido',
+        'fields' => [
+            'key' => 'Chave',
+            'idpub' => 'Código',
+            'produtos' => 'Produtos',
+            'price_total' => 'Valor',
+            'status' => 'Situação',
+            'created_at' => 'Criado em',
+            'updated_at' => 'Atualizado',
+        ],
     ],
     'users' =>[
         'identifier' => 'E-mail ou telefone',
@@ -44,7 +62,15 @@ return [
     'login' =>[
         'title' => 'Faça seu login!',
         'subtitle' => 'Indentifique-se para uma melhor experiência',
-      
+        'not'   => 'Para continuar é necessário identificar-se, por favor informe seus dados',
+    ],
+
+    'status' => [
+        'Open' => 'Aberto',
+        'Wait' => 'Aguardando',
+        'Paid' => 'Pago',
+        'Finished' => 'Finalizado',
+        'Deleted' => 'Excluido',
     ],
     'home' => [
         'title' => 'Estou bem aqui!',
@@ -57,9 +83,10 @@ return [
             'remover' => 'Remover',
             'buy' => 'Comprar',
         ],
-        'ebooks' => [
-           'title' => 'Livros digitais',
+        'products' => [
+           'title' => 'Produtos',
            'labels' => [
+                'category' => 'Categoria',
                 'key' => 'Chave',
                 'idpub' => 'ID público',
                 'title' => 'Título',

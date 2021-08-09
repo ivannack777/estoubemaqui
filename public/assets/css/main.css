@@ -2313,7 +2313,7 @@ input, select, textarea {
 		-ms-appearance: none;
 		appearance: none;
 		background: rgba(255, 255, 255, 0.05);
-		border-radius: 0.25em;
+		border-radius: 1.25em;
 		border: none;
 		border: solid 1px rgba(255, 255, 255, 0.15);
 		color: inherit;
@@ -2321,7 +2321,6 @@ input, select, textarea {
 		outline: 0;
 		padding: 0 1em;
 		text-decoration: none;
-		width: 100%;
 	}
 
 		input[type="text"]:invalid,
@@ -3945,20 +3944,22 @@ img.icon {
 .alert {
   padding: 10px;
   margin: 25px;
+  background-color:  rgba(73, 51, 130, 1);
+  border-radius: 8px;
+  border: 3px solid;
+  color: #FFFFF;
 }
 
 .alert-info {
-	border: 3px solid #8e8efd;
-	border-radius: 8px;
-	background-color: #493382;
-	color: #f4f4f4;
+	border-color: #8e8efd;
+}
+
+.alert-warning {
+	border-color: rgba(190, 110, 20, 0.7);;
 }
 
 .alert-error {
-	border: 3px solid rgb(189, 23, 90, 0.7);;
-	border-radius: 8px;
-	background-color:  rgb(255, 80, 150);
-	color: #f4f4f4;
+	border-color: rgba(189, 23, 90, 0.7);;
 }
 
 button[type=edit]{
@@ -4090,6 +4091,7 @@ div.separator {
 
 .divtable{
 	display: table;
+	border-radius: 0.5em;
 }
 .divtable-full{
 	width: 100%;
@@ -4108,14 +4110,97 @@ div.separator {
 	background-color: rgba(0, 0, 0, 0.3);
 }
 
+.table-background {
+	background-color: rgba(73, 51, 130, 1);
+}
+
 .divrow{
 	display: table-row;
+}
+.divrow-header > .divcell{
+	font-weight: bold;
 }
 .divcell{
 	display: table-cell;
 	padding: 0.3em;
 }
+.text-right{
+	text-align: right;
+}
 
 .align-rigth{
-	align-items: right;
+	display: flex;
+	justify-content: end;
+}
+
+.mouse-hover {
+	text-decoration: underline;
+	cursor: pointer;
+}
+.mouse-hover > * {
+	text-decoration: unset;
+
+}
+
+.dropdown-list{
+	position: relative;
+}
+.dropdown-list .dropdown-list-itens{
+    position: absolute;
+    top: 1.5em;
+    right: 1em;
+    display: none;
+    z-index: 10;
+    width: max-content;
+    border: 1px solid;
+    padding: 5px;
+    border-radius: 0.25em;
+    flex-direction: column;
+    background-color: rgb(73, 51, 130);
+    box-shadow: rgba(117, 97, 168, 0.95) 0px 5px 15px
+}
+.dropdown-list .dropdown-list-itens>div{
+	margin: 2px; 
+	background-color: rgba(200, 180, 250, 0.15);
+	padding: 5px;
+
+}
+.dropdown-list:hover .dropdown-list-itens{
+	display: block;
+}
+
+
+.border-animate{
+  border: 2px solid;
+  border-radius: 15px;
+  border-image-slice: 4;
+  border-image-source: linear-gradient(0deg, red, blue, green, grey);
+  animation-name: example;
+  animation-duration: 3s;
+  animation-iteration-count: infinite;
+}
+
+  @keyframes example {
+0%   { border-image-source: linear-gradient(0deg,   red, blue, green, grey);}
+5%   { border-image-source: linear-gradient(18deg,  red, blue, green, grey);}
+10%  { border-image-source: linear-gradient(36deg,  red, blue, green, grey);}
+15%  { border-image-source: linear-gradient(54deg,  red, blue, green, grey);}
+20%  { border-image-source: linear-gradient(72deg,  red, blue, green, grey);}
+25%  { border-image-source: linear-gradient(90deg,  red, blue, green, grey);}
+30%  { border-image-source: linear-gradient(108deg, red, blue, green, grey);}
+35%  { border-image-source: linear-gradient(126deg, red, blue, green, grey);}
+40%  { border-image-source: linear-gradient(144deg, red, blue, green, grey);}
+45%  { border-image-source: linear-gradient(162deg, red, blue, green, grey);}
+50%  { border-image-source: linear-gradient(180deg, red, blue, green, grey);}
+55%  { border-image-source: linear-gradient(198deg, red, blue, green, grey);}
+60%  { border-image-source: linear-gradient(216deg, red, blue, green, grey);}
+65%  { border-image-source: linear-gradient(234deg, red, blue, green, grey);}
+70%  { border-image-source: linear-gradient(252deg, red, blue, green, grey);}
+75%  { border-image-source: linear-gradient(270deg, red, blue, green, grey);}
+80%  { border-image-source: linear-gradient(288deg, red, blue, green, grey);}
+85%  { border-image-source: linear-gradient(306deg, red, blue, green, grey);}
+90%  { border-image-source: linear-gradient(324deg, red, blue, green, grey);}
+95%  { border-image-source: linear-gradient(342deg, red, blue, green, grey);}
+100% { border-image-source: linear-gradient(360deg, red, blue, green, grey);}
+
 }

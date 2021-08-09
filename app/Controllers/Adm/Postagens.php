@@ -1,7 +1,8 @@
 <?php
 
 namespace App\Controllers\Adm;
- use CodeIgniter\Controller;
+use CodeIgniter\Controller;
+use App\Dates as Dates;
 class Postagens extends Controller
 {
 	private $db;
@@ -12,9 +13,11 @@ class Postagens extends Controller
 	public function __construct(){
 		$this->db = \Config\Database::connect();
 		$this->table = 'postagens';
-		$this->columns = ['id','idpub','title','subtitle','text','author','public_at','create_at','update_at','deleted_at'];
+		$this->columns = ['id','idpub','title','subtitle','text','author','public_at','created_at','updated_at','deleted_at'];
 		$this->session = \Config\Services::session();
-
+		$loginsession =	$this->session->get('login');
+		$usuarios = new \App\Models\Usuarios();
+		$this->userPrefs = $usuarios->userPrefs($loginsession['id']);
 	}
 
 	public function __destruct(){
@@ -23,7 +26,9 @@ class Postagens extends Controller
 
 	public function index($item=null)
 	{
-		$data['user'] = (object)['lang'=>'pt-br', 'timezone' => 'America/Sao_Paulo'];
+
+		$data['user'] = $this->userPrefs[0];
+		$data['loginsession'] =	$this->session->get('login');
 		$edit = false;
 
 		$retorno = $this->session->get('retorno');
@@ -48,7 +53,7 @@ class Postagens extends Controller
 		}
 
 		$data['session'] = $this->session;
-		echo view('header', $data);
+		echo view('adm/header', $data);
 		//echo view('sidebar', $data);
 		if($edit) echo view('adm/postagens_edit', $data);
 		else echo view('adm/postagens', $data);

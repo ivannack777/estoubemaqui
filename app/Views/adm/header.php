@@ -13,3 +13,7 @@
         <noscript><link rel="stylesheet" href="<?php echo site_url('assets/css/noscript.css') ?>" /></noscript>
     </head>
     <body class="is-preload">
+        <a href="<?= site_url('/') ?>">Site</a>
+        <a href="<?= site_url('adm/home') ?>">Home</a>
+        <a href="<?= site_url('adm/produtos') ?>">Produtos</a>
+        <a href="<?= site_url('adm/postagens') ?>">Postagens</a>
