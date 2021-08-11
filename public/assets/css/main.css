@@ -4162,6 +4162,11 @@ div.separator {
 	display: block;
 }
 
+.form-items input{
+	width: 100%;
+}
+
+
 
 .border-animate{
   border: 2px solid;
@@ -4198,6 +4203,3 @@ div.separator {
 
 }
 
-.form-items input{
-	width: 100%;
-}

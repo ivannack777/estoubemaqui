@@ -1,0 +1,72 @@
+
+
+.border-animate-gradient{
+	width: 200px;
+	height: 200px;
+  border: 15px solid;
+  border-radius: 15px;
+  border-image-slice: 4;
+  border-image-source: linear-gradient(0deg, red, blue);
+  animation-name: example;
+  animation-duration: 1s;
+  animation-iteration-count: infinite;
+}
+
+@keyframes example {
+0%    { border-image-source: linear-gradient(0deg,   red, blue);}
+150%  { border-image-source: linear-gradient(90deg,   red, blue);}
+
+}
+
+
+.grounded-radiants {
+  width: 200px;
+  height: 200px;
+  border: double 1em transparent;
+  border-radius: 30px;
+  background-image: linear-gradient(white, red), linear-gradient(0deg, red, blue, green, grey);
+  background-origin: border-box;
+  background-clip: content-box, border-box;
+  animation-name: exampleanimate;
+  animation-duration: 1s;
+  animation-iteration-count: infinite;
+}
+
+
+@keyframes exampleanimate {
+    0%   { background-image: linear-gradient(white, red), linear-gradient(0deg, red, blue, green, grey);}
+    5%   { background-image: linear-gradient(white, red), linear-gradient(18deg, red, blue, green, grey);}
+    10%  { background-image: linear-gradient(white, red), linear-gradient(36deg, red, blue, green, grey);}
+    15%  { background-image: linear-gradient(white, red), linear-gradient(54deg, red, blue, green, grey);}
+    20%  { background-image: linear-gradient(white, red), linear-gradient(72deg, red, blue, green, grey);}
+    25%  { background-image: linear-gradient(white, red), linear-gradient(90deg, red, blue, green, grey);}
+    30%  { background-image: linear-gradient(white, red), linear-gradient(108deg, red, blue, green, grey);}
+    35%  { background-image: linear-gradient(white, red), linear-gradient(126deg, red, blue, green, grey);}
+    40%  { background-image: linear-gradient(white, red), linear-gradient(144deg, red, blue, green, grey);}
+    45%  { background-image: linear-gradient(white, red), linear-gradient(162deg, red, blue, green, grey);}
+    50%  { background-image: linear-gradient(white, red), linear-gradient(180deg, red, blue, green, grey);}
+    55%  { background-image: linear-gradient(white, red), linear-gradient(198deg, red, blue, green, grey);}
+    60%  { background-image: linear-gradient(white, red), linear-gradient(216deg, red, blue, green, grey);}
+    65%  { background-image: linear-gradient(white, red), linear-gradient(234deg, red, blue, green, grey);}
+    70%  { background-image: linear-gradient(white, red), linear-gradient(252deg, red, blue, green, grey);}
+    75%  { background-image: linear-gradient(white, red), linear-gradient(270deg, red, blue, green, grey);}
+    80%  { background-image: linear-gradient(white, red), linear-gradient(288deg, red, blue, green, grey);}
+    85%  { background-image: linear-gradient(white, red), linear-gradient(306deg, red, blue, green, grey);}
+    90%  { background-image: linear-gradient(white, red), linear-gradient(324deg, red, blue, green, grey);}
+    95%  { background-image: linear-gradient(white, red), linear-gradient(342deg, red, blue, green, grey);}
+}
+
+
+.border-animate{
+	width: 200px;
+	height: 200px;
+  border: 15px solid;
+  border-radius: 15px;
+transition: color 0.25s;
+}
+
+
+@keyframes exampleborder {
+   50% {border: 15px solid red;}
+   100% {border: 15px solid black;}
+}
