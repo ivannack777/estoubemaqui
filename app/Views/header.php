@@ -10,6 +10,9 @@
         <meta charset="utf-8" />
         <meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no" />
         <link rel="stylesheet" href="<?php echo site_url('assets/css/main.css') ?>" />
+
+
+        
         <!-- <link rel="stylesheet" href="<?php echo site_url('assets/css/bootstrap.min.css') ?>" /> -->
         <link rel="stylesheet" href="<?php echo site_url('assets/fontawesome/css/all.min.css') ?>" />
         <noscript><link rel="stylesheet" href="<?php echo site_url('assets/css/noscript.css') ?>" /></noscript>

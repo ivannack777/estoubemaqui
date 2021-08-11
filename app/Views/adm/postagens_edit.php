@@ -7,6 +7,7 @@ if(isset($postagens->public_at) && $postagens->public_at){
 
 $postagens = $postagens[0] ?? null;
 
+var_dump($postagens);
 ?>
 		<!-- Wrapper -->
 			<div id="wrapper">
@@ -16,9 +17,9 @@ $postagens = $postagens[0] ?? null;
 						<section id="postagens" >
 							<div class="content">
 								<!-- posts session -->
-								<h2 class="sessions"><a href="<?= site_url('adm/home/postagens') ?>">  <?= lang("Site.home.posts.title", [], $user->lang); ?></a></h2>
+								<h2 class="sessions"><a href="<?= site_url('adm/postagens') ?>">  <?= lang("Site.home.posts.title", [], $user->lang); ?></a></h2>
 
-								<div class="inner items">
+								<div class="form-items">
 									<form action="<?= site_url('adm/postagens/save/'. ($postagens->idpub ?? 'new')) ?>" method="post">
 										<?php
 										$retorno = $session->get('retorno');
@@ -41,7 +42,7 @@ $postagens = $postagens[0] ?? null;
 										<input type="text" id="subtitle" name="subtitle" value="<?= $postagens->subtitle ?? '' ?>" />
 
 										<label for="text"><?= lang("Site.home.posts.labels.text", [], $user->lang); ?></label>
-										<textarea id="text" name="text" style="height: 250px;"><?= $postagens->text ?? '' ?></textarea>
+										<textarea id="text" name="text"><?= $postagens->text ?? '' ?></textarea>
 
 										<label for="author"><?= lang("Site.home.posts.labels.author", [], $user->lang); ?></label>
 										<input type="text" id="author" name="author" value="<?= $postagens->author ?? '' ?>" />
@@ -67,3 +68,16 @@ $postagens = $postagens[0] ?? null;
 
 			</div>
 
+
+
+Initialize Simditor：
+<script>
+Simditor.i18n = 'en-US';
+var editor = new Simditor({
+  textarea: $('#text'),
+  placeholder: 'Placeholder',
+  i18n:'en-US'
+
+});
+
+</script>

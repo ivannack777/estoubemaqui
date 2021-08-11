@@ -1,5 +1,3 @@
-@import url(fontawesome-all.min.css);
-
 /*
 	Hyperspace by HTML5 UP
 	html5up.net | @ajlkn
@@ -21,8 +19,8 @@ section, summary, time, mark, audio, video {
 	padding: 0;
 	border: 0;
 	font-size: 100%;
-	font: inherit;
-	vertical-align: baseline;}
+	vertical-align: baseline;
+}
 
 article, aside, details, figcaption, figure,
 footer, header, hgroup, menu, nav, section {
@@ -160,11 +158,6 @@ input, select, textarea {
 			border-bottom-color: transparent;
 			color: #ffffff;
 		}
-
-	strong, b {
-		color: #ffffff;
-		font-weight: bold;
-	}
 
 	em, i {
 		font-style: italic;
@@ -3088,7 +3081,7 @@ input, select, textarea {
 			-webkit-transform: translateX(-1em);
 			-ms-transform: translateX(-1em);
 			transform: translateX(-1em);
-			opacity: 0;
+			/* opacity: 0; */
 		}
 
 		@media screen and (max-width: 1680px) {
@@ -4203,4 +4196,8 @@ div.separator {
 95%  { border-image-source: linear-gradient(342deg, red, blue, green, grey);}
 100% { border-image-source: linear-gradient(360deg, red, blue, green, grey);}
 
+}
+
+.form-items input{
+	width: 100%;
 }

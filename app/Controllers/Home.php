@@ -6,16 +6,19 @@ class Home extends BaseController
 {
 	private $db;
 	private $session;
+	private $loginsession;
 
 	public function __construct(){
 		$this->db = \Config\Database::connect();
 		$this->session = \Config\Services::session();
+		$this->loginsession = $this->session->get('login');
 	}
 
 	public function index()
 	{
 		$data['user'] = (object)['lang'=>'pt-br', 'price_simbol' => "R$"];
 		$data['home'] = true;
+		$data['loginsession'] = $this->loginsession;
 
 		$produtos = new \App\Models\Produtos();
 		$postagens = new \App\Models\Postagens();
@@ -23,7 +26,7 @@ class Home extends BaseController
 
 		$data['ebooks'] = $produtos->where('deleted_at', null)->where('categorias_id', 1)->get()->getResult();
 		$data['postagens'] = $postagens->where('deleted_at', null)->get()->getResult();
-		$data['loginsession'] = $this->session->get('login');
+		
 		 // var_dump($data['loginsession'] );exit;
 		echo view('header', $data);
 		echo view('sidebar', $data);
@@ -34,7 +37,7 @@ class Home extends BaseController
 	public function ebooks($item=null, $key=false)
 	{
 		$data['user'] = (object)['lang'=>'pt-br', 'price_simbol' => "R$"];
-
+		$data['loginsession'] = $this->loginsession;
 		$produtos = new \App\Models\Produtos();
 
 		if($item){
@@ -45,9 +48,6 @@ class Home extends BaseController
 		}
 		
 		$data['ebooks'] = $produtos->get()->getResult();
-
-		
-		$data['session'] = $this->session;
 		echo view('header', $data);
 		// echo view('sidebar', $data);
 		if($produtos->resultID->num_rows === 1) {
@@ -69,6 +69,7 @@ class Home extends BaseController
 	public function postagens($item=null)
 	{
 		$data['user'] = (object)['lang'=>'pt-br', 'price_simbol' => "R$"];
+		$data['loginsession'] = $this->loginsession;
 
 		$postagens = new \App\Models\Postagens();
 		if($item){
@@ -76,9 +77,8 @@ class Home extends BaseController
 		}
 		
 		$data['postagens'] = $postagens->get()->getResult();
-		$data['session'] = $session;
 		echo view('header', $data);
-		// echo view('sidebar', $data);
+		echo view('sidebar', $data);
 		if($postagens->resultID->num_rows === 1) {
 			$data['postagem'] = $data['postagens'][0];
 			echo view('postagem', $data);

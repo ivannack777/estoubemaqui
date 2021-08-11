@@ -44,3 +44,13 @@
 
 			</div>
 
+<textarea id="editor" placeholder="Balabala" autofocus></textarea>
+
+Initialize Simditor：
+<script type="text/javascript">
+var editor = new Simditor({
+  textarea: $('#editor')
+  //optional options
+});
+	
+</script>
