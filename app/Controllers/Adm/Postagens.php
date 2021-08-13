@@ -3,6 +3,8 @@
 namespace App\Controllers\Adm;
 use CodeIgniter\Controller;
 use App\Dates as Dates;
+use App\Helpers\Sanitize;
+
 class Postagens extends Controller
 {
 	private $db;
@@ -16,8 +18,18 @@ class Postagens extends Controller
 		$this->columns = ['id','idpub','title','subtitle','text','author','public_at','created_at','updated_at','deleted_at'];
 		$this->session = \Config\Services::session();
 		$loginsession =	$this->session->get('login');
-		$usuarios = new \App\Models\Usuarios();
-		$this->userPrefs = $usuarios->userPrefs($loginsession['id']);
+		
+		if($loginsession && isset($loginsession['id'])){
+			$usuarios = new \App\Models\Usuarios();
+			$this->userPrefs = $usuarios->userPrefs($loginsession['id']);
+		} else {
+			$data['user'] = (object)['lang'=>'pt-br', 'price_simbol' => "R$"];
+			$data['retorno'] = ['status' => false, 'msg' => lang("Site.login.not", [], $data['user']->lang), 'uri' => uri_string()];
+			echo view('adm/header', $data);
+			echo view('/login', $data);
+			echo view('adm/footer', $data);
+			var_dump($loginsession, $data['retorno']);exit;
+		}
 	}
 
 	public function __destruct(){
@@ -61,12 +73,12 @@ class Postagens extends Controller
 
 	}
 
-	public function save($item=null, $deleted=false)
+	public function save($key, $deleted=false)
 	{
 
 		$data['user'] = (object)['lang'=>'pt-br', 'timezone' => 'America/Sao_Paulo'];
 		//subtitle,pages,author,description,cover');
-		if($item){
+		if($key){
 			$builder = $this->db->table($this->table);
 
 			$title = $this->request->getPost('title');
@@ -81,13 +93,21 @@ class Postagens extends Controller
 			$dados['author'] = $author;
 
 
-			$builder->where('idpub', $item);
+			$builder->where('key', $key);
 			$query = $builder->get();
 
+				$sanitize = new Sanitize($title);
+				$idpub = $sanitize->string();
+				var_dump($title, $idpub);
+				$idpub = $sanitize->transcode(true);
+				$idpub = $sanitize->tolow();
+				var_dump($title, $idpub);
+				exit;
 
 			if($query->resultID->num_rows === 0) {
 
-				$dados['idpub'] = hash('sha256', $title . time());
+
+
 				if($public == 'S'){
 					$dados['public_at'] = date('Y-m-d H:i:s');
 				} else {
@@ -140,13 +160,13 @@ class Postagens extends Controller
 					];
 
 				}
-				$builder->where('idpub', $item);
+				$builder->where('key', $key);
 				$builder->update();
 			}
 
 		}
 		$this->session->set('retorno', $retorno);
-		return redirect()->to(site_url('adm/postagens/index/'.$item));
+		return redirect()->to(site_url('adm/postagens/index/'.$key));
 
 	}
 }

@@ -95,4 +95,8 @@ class Login extends BaseController
 		$this->session->remove('login');
 		return redirect()->to('/');
 	}
+
+	public function checkAuth(){
+		var_dump($his->sesseion);
+	}
 }

@@ -7,7 +7,7 @@ if(isset($postagens->public_at) && $postagens->public_at){
 
 $postagens = $postagens[0] ?? null;
 
-var_dump($postagens);
+// var_dump($postagens);
 ?>
 		<!-- Wrapper -->
 			<div id="wrapper">
@@ -20,7 +20,7 @@ var_dump($postagens);
 								<h2 class="sessions"><a href="<?= site_url('adm/postagens') ?>">  <?= lang("Site.home.posts.title", [], $user->lang); ?></a></h2>
 
 								<div class="form-items">
-									<form action="<?= site_url('adm/postagens/save/'. ($postagens->idpub ?? 'new')) ?>" method="post">
+									<form action="<?= site_url('adm/postagens/save/'. ($postagens->key ?? 'new')) ?>" method="post">
 										<?php
 										$retorno = $session->get('retorno');
 
