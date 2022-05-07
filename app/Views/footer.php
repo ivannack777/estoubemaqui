@@ -390,6 +390,12 @@ $('.rolar').on('click', function(event) {
 
 });
 
+
+$('.dropdown > button').click(function(){
+    $(this).parent('div').find('.dropdown-menu').css('display', 'block');
+})
+
+
 </script>
     </body>
 </html>

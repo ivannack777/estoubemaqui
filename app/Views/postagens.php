@@ -13,7 +13,7 @@
 						<section id="ebooks" >
 							<div class="content">
 								<!-- posts session -->
-								<h2 class="sessions"><?= lang("Site.home.posts.title", [], $user->lang); ?></h2>
+								<h1 class="sessions"><?= lang("Site.home.posts.title", [], $user->lang); ?></h1>
 
 								<?php 
 									// var_dump($ebooks);

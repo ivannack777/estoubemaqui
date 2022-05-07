@@ -18,54 +18,59 @@
 
 				<!-- One -->
 					<section class="wrapper style2 spotlights">
-						<section id="ebooks" >
-							<a href="#" class="image"><img src="<?= site_url('assets/images/ebook_04.jpeg') ?>" alt="" data-position="center center" /></a>
-							<div class="content">
-								<!-- posts session -->
-								<h2 class="sessions"><?= lang("Site.home.ebooks.title", [], $user->lang); ?></h2>
-									<?php foreach($ebooks as $ebook): ?>
-										<div class="inner items separator">
-											<h2><?= $ebook->title ?></h2>
-											<h3><?= $ebook->subtitle ?></h3>
-											<p><?= substr($ebook->description, 0, 50) . (strlen($ebook->description) >= 50 ? '...': '') ?></p>
-											<p>
-												<span class="<?= $ebook->price_promo ? 'price-promo' : 'price' ?>"><?= $user->price_simbol ?> <?= $ebook->price ?></span>
-												<?php if($ebook->price_promo): ?>
-													<span class="price"><?= $user->price_simbol ?> <?= $ebook->price_promo ?></span>
-												<?php endif ?>
-												<?php if(empty($ebook->price) && empty($ebook->price_promo)): ?>
-													<span class="price">0.00</span>
-												<?php endif ?>
-											</p>
-
-											<ul class="actions">
-												<li><a href="<?= site_url("home/ebooks/". $ebook->key ) ?>" class="button"><?= lang("Site.home.buttons.learnmore", [], $user->lang); ?></a></li>
-												<li><button class="button addItem" data-item="<?= $ebook->key ?>"><?= lang("Site.home.buttons.add", [], $user->lang); ?></button></li>
-											</ul>
-										</div>
-									<?php endforeach ?>
-							</div>
-						</section>
 
 						<section id="posts" >
-							<a href="#" class="image"><img src="<?= site_url('assets/images/lang/'. $user->lang .'/posts.jpg') ?>" alt="" data-position="center center" /></a>
+							<a href="#posts" class="image"><img src="<?= site_url('assets/images/lang/'. $user->lang .'/posts0.jpg') ?>" alt="" data-position="center center" /></a>
 							<div class="content">
 								<!-- posts session -->
 								<h2 class="sessions"><?= lang("Site.home.posts.title", [], $user->lang); ?></h2>
-
-								<?php foreach($postagens as $postagem): ?>
+								<?php foreach($postagens as $postagem): 
+									$text = strip_tags($postagem->text);
+									// echo $text;
+									?>
 									<div class="inner items separator">
-										<h2><a href="<?= site_url("home/postagens/". $postagem->key ) ?>"><?= $postagem->title ?></a></h2>
+										<h2><a href="<?= site_url("home/postagens/". $postagem->idpub ) ?>"><?= $postagem->title ?></a></h2>
 										<h3><?= $postagem->subtitle ?></h3>
-										<p><?= substr($postagem->text, 0, 250) . (strlen($postagem->text) >= 250 ? '...': '') ?></p>
+										<p><?= substr($text, 0, 250) . (strlen($text) >= 250 ? '...': '') ?></p>
 
 										<ul class="actions">
-											<li><a href="<?= site_url("home/postagens/". $postagem->key ) ?>" class="button"><?= lang("Site.home.buttons.learnmore", [], $user->lang); ?></a></li>
+											<li><a href="<?= site_url("home/postagens/". $postagem->idpub ) ?>"><button><?= lang("Site.home.buttons.learnmore", [], $user->lang); ?></button></a></li>
 										</ul>
 									</div>
 								<?php endforeach ?>
 							</div>
 						</section>
+
+						<section id="products" >
+							<a href="#products" class="image"><img src="<?= site_url('assets/images/produto_04.jpeg') ?>" alt="" data-position="center center" /></a>
+							<div class="content">
+								<!-- posts session -->
+								<h2 class="sessions"><?= lang("Site.home.products.title", [], $user->lang); ?></h2>
+								<?php foreach($produtos as $produto): ?>
+									<div class="inner items separator">
+										<h2><a href="<?= site_url("home/produtos/". $produto->idpub ) ?>"><?= $produto->title ?></a></h2>
+										<h3><?= $produto->subtitle ?></h3>
+										<p><?= substr($produto->description, 0, 50) . (strlen($produto->description) >= 50 ? '...': '') ?></p>
+										<p class="price">
+											<span class="<?= $produto->price_promo ? 'price-promo' : 'price' ?>"><?= $user->price_simbol ?> <?= $produto->price ?></span>
+											<?php if($produto->price_promo): ?>
+												<span class="price"><?= $user->price_simbol ?> <?= $produto->price_promo ?></span>
+											<?php endif ?>
+											<?php if(empty($produto->price) && empty($produto->price_promo)): ?>
+												<span class="price">0.00</span>
+											<?php endif ?>
+										</p>
+
+										<ul class="actions">
+											<li><a href="<?= site_url("home/produtos/". $produto->idpub ) ?>"><button><?= lang("Site.home.buttons.learnmore", [], $user->lang); ?></button></a></li>
+											<li><button class="button addItem" data-item="<?= $produto->key ?>"><?= lang("Site.home.buttons.add", [], $user->lang); ?></button></li>
+										</ul>
+									</div>
+								<?php endforeach ?>
+							</div>
+						</section>
+
+
 
 
 					</section>
@@ -150,7 +155,7 @@
 											<h3>Social</h3>
 											<ul class="icons">
 												<li><a href="#" class="icon brands fa-twitter"><span class="label">Twitter</span></a></li>
-												<li><a href="#" class="icon brands fa-facebook-f"><span class="label">Facebook</span></a></li>
+												<li><a href="#" class="icon brands fa-facproduto-f"><span class="label">Facproduto</span></a></li>
 												<li><a href="#" class="icon brands fa-github"><span class="label">GitHub</span></a></li>
 												<li><a href="#" class="icon brands fa-instagram"><span class="label">Instagram</span></a></li>
 												<li><a href="#" class="icon brands fa-linkedin-in"><span class="label">LinkedIn</span></a></li>

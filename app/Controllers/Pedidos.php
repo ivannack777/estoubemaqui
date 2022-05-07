@@ -12,23 +12,20 @@ class Pedidos extends BaseController
 	public function __construct(){
 		$this->session = \Config\Services::session();
 		$this->loginsession = $this->session->get('login');
+
 		if($this->loginsession){
 			$usuarios = new \App\Models\Usuarios();
-			$this->userPrefs = $usuarios->userPrefs($this->loginsession['id']);
+			$userPrefs = $usuarios->userPrefs($this->loginsession['id']);
+			$this->userPrefs = $userPrefs[0];
 		} else{
-			$this->userPrefs[0] = (object)[
-				'lang' => 'pt-br',
-				'price_simbol' => 'R$',
-				'data_format' => 'd/m/Y',
-				'time_format' => 'H:i',
-				'datTime_format' => 'd/m/Y H:i',
-			];
+			$config = config('App');
+			$this->userPrefs = (object)$config->defaultUserPrefs;
 		}
 	}
 
 	public function index()
 	{
-		$data['user'] = $this->userPrefs[0];
+		$data['user'] = $this->userPrefs;
 		$data['loginsession'] = $this->loginsession;
 		$data['pedidos'] = [];
 		if($this->loginsession){
@@ -45,7 +42,7 @@ class Pedidos extends BaseController
 
 	public function salvar()
 	{
-		$data['user'] = $this->userPrefs[0];
+		$data['user'] = $this->userPrefs;
 
 		if(!$this->loginsession){
 			$data['loginrequired'] = true;

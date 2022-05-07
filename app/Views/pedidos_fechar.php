@@ -66,7 +66,7 @@
 // this is not always possible. Browser support for Chrome 43+,
 // Firefox 42+, Safari 10+, Edge and Internet Explorer 10+.
 // Internet Explorer: The clipboard feature may be disabled by
-// an administrator. By default a prompt is shown the first
+// an superinistrator. By default a prompt is shown the first
 // time the clipboard is used (per session).
 function copyToClipboard(text) {
 	console.log(text);

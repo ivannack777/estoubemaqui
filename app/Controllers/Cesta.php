@@ -7,20 +7,17 @@ class Cesta extends BaseController
 	private $session;
 	private $loginsession;
 	private $userPrefs;
+
 	public function __construct(){
 		$this->session = \Config\Services::session();
 		$this->loginsession = $this->session->get('login');
 		if($this->loginsession){
 			$usuarios = new \App\Models\Usuarios();
-			$this->userPrefs = $usuarios->userPrefs($this->loginsession['id']);
+			$userPrefs = $usuarios->userPrefs($this->loginsession['id']);
+			$this->userPrefs = $userPrefs[0];
 		} else{
-			$this->userPrefs[0] = (object)[
-				'lang' => 'pt-br',
-				'price_simbol' => 'R$',
-				'data_format' => 'd/m/Y',
-				'time_format' => 'H:i',
-				'datTime_format' => 'd/m/Y H:i',
-			];
+			$config = config('App');
+			$this->userPrefs = (object)$config->defaultUserPrefs;
 		}
 	}
 
@@ -29,7 +26,8 @@ class Cesta extends BaseController
 	 * */
 	public function index()
 	{
-		$data['user'] = $this->userPrefs[0]??null;
+		// var_dump($this->userPrefs);exit;
+		$data['user'] = $this->userPrefs;
 		$produtos = new \App\Models\Produtos();
 		$data['itens'] = [];
 		$cestaSession = $this->get();
@@ -97,6 +95,7 @@ class Cesta extends BaseController
 					$dataItens[$k]['produto'] = [
 						'id'  			=> $produto->id,
 						'key' 			=> $produto->key,
+						'cover' 		=> $produto->cover,
 						'idpub' 		=> $produto->idpub,
 						'categorias_id' => $produto->categorias_id,
 						'title' 		=> $produto->title,

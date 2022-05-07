@@ -20,10 +20,6 @@
 									<div id="cestadiv">
 
 									</div>
-									
-
-									
-
 
 									<p id="cestaAlert" class="alert alert-info" style="display:<?= count($itens) ? 'none' : 'block' ?>">
 										<span class="fa-stack fa-2x">

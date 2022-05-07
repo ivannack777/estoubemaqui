@@ -4,6 +4,8 @@ namespace Config;
 
 use CodeIgniter\Events\Events;
 use CodeIgniter\Exceptions\FrameworkException;
+use App\Controllers\Login;
+use App\Controllers\Estatistica;
 
 /*
  * --------------------------------------------------------------------
@@ -52,3 +54,8 @@ Events::on('pre_system', function () {
 		Services::toolbar()->respond();
 	}
 });
+
+
+//  
+$estatisticas = new Estatistica(\Config\Services::request());
+Events::on('post_controller_constructor', [$estatisticas, 'index']);

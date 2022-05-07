@@ -71,6 +71,30 @@ class App extends BaseConfig
 	 */
 	public $defaultLocale = 'en';
 
+
+	/**
+	 * --------------------------------------------------------------------------
+	 * Default User Prefs
+	 * --------------------------------------------------------------------------
+	 *
+	 * The Locale roughly represents the language and location that your visitor
+	 * is viewing the site from. It affects the language strings and other
+	 * strings (like currency markers, numbers, etc), that your program
+	 * should run under for this request.
+	 *
+	 * @var array
+	 */
+	public $defaultUserPrefs = [
+		'lang'=>'pt-br', 
+		'price_simbol' => "R$", 
+		'dateTime_format' => 'd/m/Y H:i',
+		'date_format' => 'd/m/Y',
+		'time_format' => 'H:i',
+		'timezone' => 'America/Sao_Paulo'
+	];
+
+
+
 	/**
 	 * --------------------------------------------------------------------------
 	 * Negotiate Locale
